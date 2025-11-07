@@ -1,0 +1,19 @@
+# Git
+.git
+.gitignore
+
+# Node
+node_modules
+**/node_modules
+
+# Builds locales
+dist
+**/dist
+
+# Editor/OS
+.vscode
+.DS_Store
+
+# Archivos pesados o docs si no los necesitas en build
+*.docx
+*.pdf
