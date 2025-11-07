@@ -6,15 +6,15 @@ WORKDIR /workspace
 
 # ---- Portal raíz (repo/src) ----
 # Si tu portal tiene package.json dentro de /src (como mostraste):
+# COPY src/package*.json ./portal/
+# RUN cd portal && npm ci
+# COPY src ./portal
+# RUN npm run build --prefix ./portal
+# Si tu package.json del portal estuviera en la raíz del repo, usarías:
 COPY package*.json ./portal/
 RUN cd portal && npm ci
 COPY . ./portal
 RUN npm run build --prefix ./portal
-# Si tu package.json del portal estuviera en la raíz del repo, usarías:
-# COPY package*.json ./portal/
-# RUN cd portal && npm ci
-# COPY . ./portal
-# RUN npm run build --prefix ./portal
 
 # ---- Appointments (/appointments-api/src) ----
 COPY appointments-api/src/package*.json ./appointments/
