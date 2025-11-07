@@ -1,41 +1,64 @@
-# -------- 1️⃣ Etapa de construcción: Build con Node --------
+# =======================
+# 1) BUILD (Vite) - Portal + 4 micro-apps
+# =======================
 FROM node:20-alpine AS build
+WORKDIR /workspace
 
-WORKDIR /web
+# ---- Portal raíz (repo/src) ----
+# Si tu portal tiene package.json dentro de /src (como mostraste):
+COPY package*.json ./portal/
+RUN cd portal && npm ci
+COPY . ./portal
+RUN npm run build --prefix ./portal
+# Si tu package.json del portal estuviera en la raíz del repo, usarías:
+# COPY package*.json ./portal/
+# RUN cd portal && npm ci
+# COPY . ./portal
+# RUN npm run build --prefix ./portal
 
-# Copia los package.json de todas las subcarpetas
-COPY appointments-api/package*.json ./appointments-api/
-COPY doctors-api/package*.json ./doctors-api/
-COPY patients-api/package*.json ./patients-api/
-COPY pharmacy-api/package*.json ./pharmacy-api/
+# ---- Appointments (/appointments-api/src) ----
+COPY appointments-api/src/package*.json ./appointments/
+RUN cd appointments && npm ci
+COPY appointments-api/src ./appointments
+RUN npm run build --prefix ./appointments
 
-# Instala dependencias y compila cada app
-COPY appointments-api ./appointments-api
-RUN cd appointments-api && npm install && npm run build
+# ---- Doctors (/doctors-api/src) ----
+COPY doctors-api/src/package*.json ./doctors/
+RUN cd doctors && npm ci
+COPY doctors-api/src ./doctors
+RUN npm run build --prefix ./doctors
 
-COPY doctors-api ./doctors-api
-RUN cd doctors-api && npm install && npm run build
+# ---- Patients (/patients-api/src) ----
+COPY patients-api/src/package*.json ./patients/
+RUN cd patients && npm ci
+COPY patients-api/src ./patients
+RUN npm run build --prefix ./patients
 
-COPY patients-api ./patients-api
-RUN cd patients-api && npm install && npm run build
+# ---- Pharmacy (/pharmacy-api/src) ----
+COPY pharmacy-api/src/package*.json ./pharmacy/
+RUN cd pharmacy && npm ci
+COPY pharmacy-api/src ./pharmacy
+RUN npm run build --prefix ./pharmacy
 
-COPY pharmacy-api ./pharmacy-api
-RUN cd pharmacy-api && npm install && npm run build
 
-# -------- 2️⃣ Etapa de producción: Nginx --------
-FROM nginx:alpine
+# =======================
+# 2) RUNTIME (Nginx)
+# =======================
+FROM nginx:1.25-alpine
 
-# Copiar configuración personalizada (la crearás abajo)
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Nginx conf global que maneja SPA en raíz y en subrutas:
+# (coloca este nginx.conf al lado del Dockerfile, en la raíz del repo)
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Copiar los builds de cada app al contenedor
-COPY --from=build /web/appointments-api/dist /usr/share/nginx/html/appointments
-COPY --from=build /web/doctors-api/dist /usr/share/nginx/html/doctors
-COPY --from=build /web/patients-api/dist /usr/share/nginx/html/patients
-COPY --from=build /web/pharmacy-api/dist /usr/share/nginx/html/pharmacy
+# Copiamos los builds a su destino final
+# Portal (raíz del sitio)
+COPY --from=build /workspace/portal/dist /usr/share/nginx/html/
 
-# Crear una página de inicio simple que sirva de "selector"
-RUN echo '<!doctype html><html><head><title>Portal Frontend</title></head><body style="font-family:sans-serif;text-align:center;margin-top:40px;"><h1>Portal Frontend</h1><p>Selecciona un módulo:</p><ul><li><a href="/appointments/">Appointments</a></li><li><a href="/doctors/">Doctors</a></li><li><a href="/patients/">Patients</a></li><li><a href="/pharmacy/">Pharmacy</a></li></ul></body></html>' > /usr/share/nginx/html/index.html
+# Micro-Apps en subdirectorios
+COPY --from=build /workspace/appointments/dist /usr/share/nginx/html/appointments/
+COPY --from=build /workspace/doctors/dist      /usr/share/nginx/html/doctors/
+COPY --from=build /workspace/patients/dist     /usr/share/nginx/html/patients/
+COPY --from=build /workspace/pharmacy/dist     /usr/share/nginx/html/pharmacy/
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
