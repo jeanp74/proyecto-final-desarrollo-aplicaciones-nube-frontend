@@ -1,6 +1,6 @@
 function App() {
   return (
-    <div>
+    <div style={{ textAlign: "center" }}>
       <h1>Portal Frontend</h1>
       <p>Selecciona un módulo:</p>
       <ul>
