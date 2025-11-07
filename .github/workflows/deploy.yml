@@ -36,8 +36,8 @@ jobs:
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:${{ steps.vars.outputs.TAG }}
 
-      - name: 🚀 Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: front-proyecto-final-desarrollo
-          images: ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
+      # - name: 🚀 Deploy to Azure Web App
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     app-name: front-proyecto-final-desarrollo
+      #     images: ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
