@@ -49,11 +49,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Portal (raíz del sitio)
 COPY --from=build /workspace/portal/dist /usr/share/nginx/html/
 
-# Micro-Apps en subdirectorios
-COPY --from=build /workspace/appointments/dist /usr/share/nginx/html/appointments/
-COPY --from=build /workspace/doctors/dist      /usr/share/nginx/html/doctors/
-COPY --from=build /workspace/patients/dist     /usr/share/nginx/html/patients/
-COPY --from=build /workspace/pharmacy/dist     /usr/share/nginx/html/pharmacy/
+# Copiar los builds de cada app al contenedor
+COPY --from=build /web/appointments-api/dist /usr/share/nginx/html/appointments
+COPY --from=build /web/doctors-api/dist /usr/share/nginx/html/doctors
+COPY --from=build /web/patients-api/dist /usr/share/nginx/html/patients
+COPY --from=build /web/pharmacy-api/dist /usr/share/nginx/html/pharmacy
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
