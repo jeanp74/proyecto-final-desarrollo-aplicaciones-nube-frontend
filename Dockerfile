@@ -16,29 +16,24 @@ RUN cd portal && npm ci
 COPY . ./portal
 RUN npm run build --prefix ./portal
 
-# ---- Appointments (/appointments-api/src) ----
-COPY appointments-api/src/package*.json ./appointments/
-RUN cd appointments && npm ci
-COPY appointments-api/src ./appointments
-RUN npm run build --prefix ./appointments
+# Copia los package.json de todas las subcarpetas
+COPY appointments-api/package*.json ./appointments-api/
+COPY doctors-api/package*.json ./doctors-api/
+COPY patients-api/package*.json ./patients-api/
+COPY pharmacy-api/package*.json ./pharmacy-api/
 
-# ---- Doctors (/doctors-api/src) ----
-COPY doctors-api/src/package*.json ./doctors/
-RUN cd doctors && npm ci
-COPY doctors-api/src ./doctors
-RUN npm run build --prefix ./doctors
+# Instala dependencias y compila cada app
+COPY appointments-api ./appointments-api
+RUN cd appointments-api && npm install && npm run build
 
-# ---- Patients (/patients-api/src) ----
-COPY patients-api/src/package*.json ./patients/
-RUN cd patients && npm ci
-COPY patients-api/src ./patients
-RUN npm run build --prefix ./patients
+COPY doctors-api ./doctors-api
+RUN cd doctors-api && npm install && npm run build
 
-# ---- Pharmacy (/pharmacy-api/src) ----
-COPY pharmacy-api/src/package*.json ./pharmacy/
-RUN cd pharmacy && npm ci
-COPY pharmacy-api/src ./pharmacy
-RUN npm run build --prefix ./pharmacy
+COPY patients-api ./patients-api
+RUN cd patients-api && npm install && npm run build
+
+COPY pharmacy-api ./pharmacy-api
+RUN cd pharmacy-api && npm install && npm run build
 
 
 # =======================
