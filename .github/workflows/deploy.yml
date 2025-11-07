@@ -1,0 +1,43 @@
+name: Frontend | Build & Deploy to Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🔐 Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 🔑 Login to ACR
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: 🏷️ Short SHA
+        id: vars
+        run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
+      - name: 🏗️ Build & Push Image
+        run: |
+          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest .
+          docker tag  ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest ${{ secrets.ACR_LOGIN_SERVER }}/front-app:${{ steps.vars.outputs.TAG }}
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
+          docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:${{ steps.vars.outputs.TAG }}
+
+      - name: 🚀 Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: front-proyecto-final-desarrollo
+          images: ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
