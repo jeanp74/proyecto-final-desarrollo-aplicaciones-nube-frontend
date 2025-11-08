@@ -13,23 +13,23 @@ COPY src ./portal/src
 RUN cd portal && npm ci && npm run build
 
 # Copia los package.json de todas las subcarpetas
-COPY appointments-api/package*.json ./appointments-api/
-COPY doctors-api/package*.json ./doctors-api/
-COPY patients-api/package*.json ./patients-api/
-COPY pharmacy-api/package*.json ./pharmacy-api/
+COPY appointments-client/package*.json ./appointments-client/
+COPY doctors-client/package*.json ./doctors-client/
+COPY patients-client/package*.json ./patients-client/
+COPY pharmacy-client/package*.json ./pharmacy-client/
 
 # Instala dependencias y compila cada app
-COPY appointments-api ./appointments-api
-RUN cd appointments-api && npm install && npm run build
+COPY appointments-client ./appointments-client
+RUN cd appointments-client && npm install && npm run build
 
-COPY doctors-api ./doctors-api
-RUN cd doctors-api && npm install && npm run build
+COPY doctors-client ./doctors-client
+RUN cd doctors-client && npm install && npm run build
 
-COPY patients-api ./patients-api
-RUN cd patients-api && npm install && npm run build
+COPY patients-client ./patients-client
+RUN cd patients-client && npm install && npm run build
 
-COPY pharmacy-api ./pharmacy-api
-RUN cd pharmacy-api && npm install && npm run build
+COPY pharmacy-client ./pharmacy-client
+RUN cd pharmacy-client && npm install && npm run build
 
 
 # =======================
@@ -44,10 +44,10 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /workspace/portal/dist /usr/share/nginx/html/
 
 # Copiar los builds de cada app al contenedor
-COPY --from=build /workspace/appointments-api/dist /usr/share/nginx/html/appointments
-COPY --from=build /workspace/doctors-api/dist /usr/share/nginx/html/doctors
-COPY --from=build /workspace/patients-api/dist /usr/share/nginx/html/patients
-COPY --from=build /workspace/pharmacy-api/dist /usr/share/nginx/html/pharmacy
+COPY --from=build /workspace/appointments-client/dist /usr/share/nginx/html/appointments
+COPY --from=build /workspace/doctors-client/dist /usr/share/nginx/html/doctors
+COPY --from=build /workspace/patients-client/dist /usr/share/nginx/html/patients
+COPY --from=build /workspace/pharmacy-client/dist /usr/share/nginx/html/pharmacy
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
