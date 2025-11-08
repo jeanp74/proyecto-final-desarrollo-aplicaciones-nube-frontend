@@ -1,12 +1,20 @@
 # -------- FRONTEND BUILD (Vite) --------
 FROM node:20-alpine AS webbuild
 WORKDIR /web
+
+# Instalar deps con caché óptima
 COPY package*.json ./
 RUN npm ci
+
+# Copiar el resto (src, vite.config.js, index.html, etc.)
 COPY . .
-# Como front y API estarán en el mismo dominio, base "/"
-ARG VITE_API_LOGIN_BASE=/
-ENV VITE_API_LOGIN_BASE=${VITE_API_LOGIN_BASE}
+
+# Recibe la URL del backend en tiempo de build
+ARG VITE_API_LOGIN_BASE="/"
+# OPCIONAL pero muy recomendado: genera un .env para que Vite lo lea seguro
+RUN echo "VITE_API_LOGIN_BASE=${VITE_API_LOGIN_BASE}" > .env
+
+# Construir
 RUN npm run build
 
 # -------- RUNTIME (Nginx) --------

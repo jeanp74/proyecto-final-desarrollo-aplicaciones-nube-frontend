@@ -1,20 +1,12 @@
-// pharmacy-frontend/src/api.js
+// login-frontend/src/api.js
 
 // === Claves en localStorage ===
-const PHARM_KEY = "pharmacy_react_api_base";
-const PATIENTS_KEY = "patients_api_base";
-const DOCTORS_KEY  = "doctors_api_base";
+const LOGIN_KEY = "login_react_api_base";
 
 // === Defaults (sobrescribibles por .env Vite) ===
-const PHARM_DEFAULT =
-  import.meta.env.VITE_PHARMACY_API_BASE || process.env.VITE_PHARMACY_API_BASE ||
-  "https://pharmacy-proyecto-final-desarrollo-cgeyfreje5aqdxbr.brazilsouth-01.azurewebsites.net/";
-
-const PATIENTS_DEFAULT =
-  import.meta.env.VITE_PATIENTS_API_BASE || process.env.VITE_PATIENTS_API_BASE;
-
-const DOCTORS_DEFAULT =
-  import.meta.env.VITE_DOCTORS_API_BASE || process.env.VITE_DOCTORS_API_BASE;
+const LOGIN_DEFAULT =
+  import.meta.env.VITE_API_LOGIN_BASE || process.env.VITE_API_LOGIN_BASE ||
+  "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/";
 
 // === Utils ===
 function joinUrl(base, path) {
@@ -23,12 +15,12 @@ function joinUrl(base, path) {
   return `${b}${p}`;
 }
 
-// === Pharmacy API base ===
+// === Login API base ===
 export function getApiBase() {
-  return localStorage.getItem(PHARM_KEY) || PHARM_DEFAULT;
+  return localStorage.getItem(LOGIN_KEY) || LOGIN_DEFAULT;
 }
 export function setApiBase(v) {
-  localStorage.setItem(PHARM_KEY, v);
+  localStorage.setItem(LOGIN_KEY, v);
 }
 
 // === Pacientes / Doctores API base ===
