@@ -1,13 +1,26 @@
-name: Frontend | Build & Deploy to Azure Web App
+name: Frontend | Build & Deploy to Azure Web App (portal + login)
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    # Dos targets: portal (raíz) y login-client (subcarpeta)
+    strategy:
+      matrix:
+        include:
+          - name: portal
+            context: .
+            image: front-app
+            webapp: front-proyecto-final-desarrollo
+          - name: login
+            context: ./login-client
+            image: front-app2
+            webapp: front-proyecto-final-desarrollo2
 
     steps:
       - name: 📥 Checkout
@@ -29,9 +42,17 @@ jobs:
         id: vars
         run: echo "TAG=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
-      - name: 🏗️ Build & Push Image
+      # Build & push de cada target de la matrix
+      - name: 🏗️ Build & Push ${{ matrix.name }}
         run: |
-          docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest .
-          docker tag  ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest ${{ secrets.ACR_LOGIN_SERVER }}/front-app:${{ steps.vars.outputs.TAG }}
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:latest
-          docker push ${{ secrets.ACR_LOGIN_SERVER }}/front-app:${{ steps.vars.outputs.TAG }}
+          ACR="${{ secrets.ACR_LOGIN_SERVER }}"
+          IMG="${{ matrix.image }}"
+          TAG="${{ steps.vars.outputs.TAG }}"
+
+          # Si tus apps usan Vite y necesitan URLs, pásalas como build-args
+          docker build ${{ matrix.context }} \
+            --build-arg VITE_APPOINTMENTS_API_BASE='${{ secrets.VITE_APPOINTMENTS_API_BASE }}' \
+            --build-arg VITE_DOCTORS_API_BASE='${{ secrets.VITE_DOCTORS_API_BASE }}' \
+            --build-arg VITE_PATIENTS_API_BASE='${{ secrets.VITE_PATIENTS_API_BASE }}' \
+            --build-arg VITE_PHARMACY_API_BASE='${{ secrets.VITE_PHARMACY_API_BASE }}' \
+            --build-arg VITE_LOGIN_API_BASE='${{ secrets.VITE_LOGIN_API_BASE }}' \
