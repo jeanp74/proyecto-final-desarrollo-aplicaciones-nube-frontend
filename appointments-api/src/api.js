@@ -9,13 +9,13 @@ const DOCTORS_KEY  = "doctors_api_base";
 
 // ---- Defaults (puedes sobreescribirlos en .env con VITE_* ) ----
 const APPT_DEFAULT =
-  import.meta.env.VITE_APPOINTMENTS_API_BASE;
+  import.meta.env.VITE_APPOINTMENTS_API_BASE || "/";
 
 const PATIENTS_DEFAULT =
-  import.meta.env.VITE_PATIENTS_API_BASE;
+  import.meta.env.VITE_PATIENTS_API_BASE || "/";
 
 const DOCTORS_DEFAULT =
-  import.meta.env.VITE_DOCTORS_API_BASE;
+  import.meta.env.VITE_DOCTORS_API_BASE || "/";
 
 // ---- Utils ----
 function joinUrl(base, path) {

@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'users_react_api_base';
 
 export function getApiBase() {
-  return localStorage.getItem(STORAGE_KEY) || import.meta.env.VITE_DOCTORS_API_BASE;
+  return localStorage.getItem(STORAGE_KEY) || import.meta.env.VITE_DOCTORS_API_BASE || "/";
 }
 
 export function setApiBase(v) {

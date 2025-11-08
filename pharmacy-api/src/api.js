@@ -7,13 +7,13 @@ const DOCTORS_KEY  = "doctors_api_base";
 
 // === Defaults (sobrescribibles por .env Vite) ===
 const PHARM_DEFAULT =
-  import.meta.env.VITE_PHARMACY_sAPI_BASE;
+  import.meta.env.VITE_PHARMACY_API_BASE || "/";
 
 const PATIENTS_DEFAULT =
-  import.meta.env.VITE_PATIENTS_API_BASE;
+  import.meta.env.VITE_PATIENTS_API_BASE || "/";
 
 const DOCTORS_DEFAULT =
-  import.meta.env.VITE_DOCTORS_API_BASE;
+  import.meta.env.VITE_DOCTORS_API_BASE || "/";
 
 // === Utils ===
 function joinUrl(base, path) {
