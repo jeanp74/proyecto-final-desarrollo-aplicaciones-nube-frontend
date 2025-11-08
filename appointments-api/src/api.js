@@ -9,7 +9,7 @@ const DOCTORS_KEY  = "doctors_api_base";
 
 // ---- Defaults (puedes sobreescribirlos en .env con VITE_* ) ----
 const APPT_DEFAULT =
-  import.meta.env.VITE_APPOINTMENTS_API_BASE || process.env.VITE_APPOINTMENTS_API_BASE;
+  import.meta.env.VITE_APPOINTMENTS_API_BASE || process.env.VITE_APPOINTMENTS_API_BASE || "https://appointments-proyecto-final-desarrollo-gafjenapfvb2e6da.brazilsouth-01.azurewebsites.net/";
 
 const PATIENTS_DEFAULT =
   import.meta.env.VITE_PATIENTS_API_BASE || process.env.VITE_PATIENTS_API_BASE;
