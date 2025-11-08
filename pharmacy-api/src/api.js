@@ -7,13 +7,16 @@ const DOCTORS_KEY  = "doctors_api_base";
 
 // === Defaults (sobrescribibles por .env Vite) ===
 const PHARM_DEFAULT =
-  import.meta.env.VITE_PHARMACY_API_BASE;
+  import.meta.env.VITE_API_BASE ||
+  "https://pharmacy-proyecto-final-desarrollo-cgeyfreje5aqdxbr.brazilsouth-01.azurewebsites.net/";
 
 const PATIENTS_DEFAULT =
-  import.meta.env.VITE_PATIENTS_API_BASE;
+  import.meta.env.VITE_PATIENTS_API_BASE ||
+  "https://patients-proyecto-final-desarrollo-dvdpe0eegng6atfy.brazilsouth-01.azurewebsites.net/";
 
 const DOCTORS_DEFAULT =
-  import.meta.env.VITE_DOCTORS_API_BASE;
+  import.meta.env.VITE_DOCTORS_API_BASE ||
+  "https://doctors-proyecto-final-desarrollo-b7aqbdbpcgd0d7bq.brazilsouth-01.azurewebsites.net/";
 
 // === Utils ===
 function joinUrl(base, path) {
