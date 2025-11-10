@@ -11,6 +11,7 @@ jobs:
 
     # Dos targets: portal (raíz) y login-client (subcarpeta)
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: portal
