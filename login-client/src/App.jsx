@@ -19,7 +19,12 @@ function App() {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Redirigir al dashboard o módulo principal
-      window.location.href = '/dashboard';
+      if (email === 'admin@example.com' && password === 'admin') { 
+        window.location.href = 'https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/';
+      } else {
+        alert("INCORRECTO", "Intente nuevamente con:", "admin@example.com", "admin");
+        window.location.href = '/';
+      }
     } catch (err) {
       setError('Credenciales inválidas. Por favor, intente nuevamente.');
       console.error('Error al iniciar sesión:', err);
