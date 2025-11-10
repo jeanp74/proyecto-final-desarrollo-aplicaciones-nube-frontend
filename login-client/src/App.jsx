@@ -22,7 +22,7 @@ function App() {
       if (email === 'admin@example.com' && password === 'admin') { 
         window.location.href = 'https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/';
       } else {
-        alert("INCORRECTO", "Intente nuevamente con:", "admin@example.com", "admin");
+        alert("INCORRECTO \nIntente nuevamente con: \nadmin@example.com \nadmin");
         window.location.href = '/';
       }
     } catch (err) {
