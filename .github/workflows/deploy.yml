@@ -50,10 +50,16 @@ jobs:
           IMG="${{ matrix.image }}"
           TAG="${{ steps.vars.outputs.TAG }}"
 
-          # Si tus apps usan Vite y necesitan URLs, pásalas como build-args
+          # Construir imagen
           docker build ${{ matrix.context }} \
+            -t $ACR/$IMG:$TAG \
+            -t $ACR/$IMG:latest \
             --build-arg VITE_APPOINTMENTS_API_BASE='${{ secrets.VITE_APPOINTMENTS_API_BASE }}' \
             --build-arg VITE_DOCTORS_API_BASE='${{ secrets.VITE_DOCTORS_API_BASE }}' \
             --build-arg VITE_PATIENTS_API_BASE='${{ secrets.VITE_PATIENTS_API_BASE }}' \
             --build-arg VITE_PHARMACY_API_BASE='${{ secrets.VITE_PHARMACY_API_BASE }}' \
-            --build-arg VITE_LOGIN_API_BASE='${{ secrets.VITE_LOGIN_API_BASE }}' \
+            --build-arg VITE_LOGIN_API_BASE='${{ secrets.VITE_LOGIN_API_BASE }}'
+
+          # Enviar al ACR
+          docker push $ACR/$IMG:$TAG
+          docker push $ACR/$IMG:latest

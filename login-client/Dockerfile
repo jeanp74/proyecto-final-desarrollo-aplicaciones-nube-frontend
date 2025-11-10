@@ -2,17 +2,16 @@
 FROM node:20-alpine AS webbuild
 WORKDIR /web
 
-# Instalar deps con caché óptima
+# Instalar deps
 COPY package*.json ./
 RUN npm ci
 
-# Copiar el resto (src, vite.config.js, index.html, etc.)
+# Copiar el resto
 COPY . .
 
 # Recibe la URL del backend en tiempo de build
-ARG VITE_API_LOGIN_BASE="/"
-# OPCIONAL pero muy recomendado: genera un .env para que Vite lo lea seguro
-RUN echo "VITE_API_LOGIN_BASE=${VITE_API_LOGIN_BASE}" > .env
+ARG VITE_LOGIN_API_BASE="/"
+RUN echo "VITE_LOGIN_API_BASE=${VITE_LOGIN_API_BASE}" > .env
 
 # Construir
 RUN npm run build
