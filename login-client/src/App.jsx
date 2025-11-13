@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './styles.css';
+import { loginRequest } from "./api";
 
 function App() {
   const [email, setEmail] = useState('');
@@ -7,31 +8,31 @@ function App() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setIsLoading(true);
-    
+
     try {
-      // Aquí iría la lógica de autenticación
-      console.log('Iniciando sesión con:', { email });
-      // Simulando una petición
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Redirigir al dashboard o módulo principal
-      if (email === 'admin@example.com' && password === 'admin') { 
-        window.location.href = 'https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/';
-      } else {
-        alert("INCORRECTO \nIntente nuevamente con: \nadmin@example.com \nadmin");
-        window.location.href = '/';
-      }
+      const data = await loginRequest(email, password);
+      console.log("Login correcto:", data);
+
+      // Guardar token y redirigir
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Redirigir al portal principal
+      window.location.href =
+        "https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/";
     } catch (err) {
-      setError('Credenciales inválidas. Por favor, intente nuevamente.');
-      console.error('Error al iniciar sesión:', err);
+      console.error("Error al iniciar sesión:", err);
+      setError("Credenciales inválidas. Intente nuevamente.");
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="login-container">
@@ -40,9 +41,9 @@ function App() {
           <h1>Bienvenido</h1>
           <p>Inicia sesión para continuar</p>
         </div>
-        
+
         {error && <div className="error-message">{error}</div>}
-        
+
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
             <label htmlFor="email">Correo Electrónico</label>
@@ -55,7 +56,7 @@ function App() {
               required
             />
           </div>
-          
+
           <div className="form-group">
             <div className="password-header">
               <label htmlFor="password">Contraseña</label>
@@ -70,12 +71,12 @@ function App() {
               required
             />
           </div>
-          
+
           <button type="submit" className="login-button" disabled={isLoading}>
             {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
         </form>
-        
+
         <div className="login-footer">
           <p>¿No tienes una cuenta? <a href="/register">Regístrate</a></p>
         </div>
