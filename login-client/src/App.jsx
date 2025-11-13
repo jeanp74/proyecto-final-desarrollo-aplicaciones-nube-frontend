@@ -19,7 +19,7 @@ function App() {
       console.log("Login correcto:", data);
 
       // Guardar token y redirigir
-      alert(data);
+      alert(JSON.parse(data));
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
 
