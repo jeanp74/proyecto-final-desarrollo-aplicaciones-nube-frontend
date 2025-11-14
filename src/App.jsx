@@ -1,4 +1,9 @@
+import { useAuthValidation } from './authUtils';
+
 function App() {
+  // Handle authentication
+  useAuthValidation();
+
   const modules = [
     { id: 'appointments', title: 'Appointments', desc: 'Gestiona y programa citas', href: '/appointments/' },
     { id: 'doctors',      title: 'Doctors',      desc: 'Directorio y horarios de médicos', href: '/doctors/' },
