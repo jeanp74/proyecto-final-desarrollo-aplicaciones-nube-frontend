@@ -24,8 +24,9 @@ function App() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       // Redirigir al portal principal
+      const userString = encodeURIComponent(JSON.stringify(data.user));
       window.location.href =
-        "https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/token=" + data.access_token + "&user=" + data.user;
+        `https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/?token=${data.access_token}&user=${userString}`;
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
       setError("Credenciales inválidas. Intente nuevamente.");

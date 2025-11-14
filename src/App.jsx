@@ -2,7 +2,7 @@ import { useAuthValidation } from './authUtils';
 
 function App() {
   // Handle authentication
-  // useAuthValidation();
+  useAuthValidation();
 
   const modules = [
     { id: 'appointments', title: 'Appointments', desc: 'Gestiona y programa citas', href: '/appointments/' },
