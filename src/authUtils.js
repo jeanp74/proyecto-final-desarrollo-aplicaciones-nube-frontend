@@ -1,27 +1,35 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export const useAuthValidation = () => {
-  const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
 
     if (token) {
+      // Guardar token
       localStorage.setItem('token', token);
+
+      // Limpiar URL sin hacer refresh
       window.history.replaceState({}, document.title, window.location.pathname);
+
       return;  
     }
 
+    // Si NO hay token en URL NI en localStorage -> redirigir al login
     if (!localStorage.getItem('token')) {
-      navigate("/login"); // <-- Router-friendly redirect
+      window.location.replace(
+        "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
+      );
     }
+
   }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
-    navigate("/login");
+    window.location.replace(
+      "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
+    );
   };
 
   return { logout };
