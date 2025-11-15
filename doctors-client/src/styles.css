@@ -33,14 +33,24 @@ header{
   padding:16px 20px;
   display:flex; align-items:center; justify-content:space-between;
 }
-header h1{ margin:0; font-size:20px; letter-spacing:.2px; }
+header h1{
+  margin:0; font-size:20px; letter-spacing:.2px;
+  font-weight:600;
+}
 
-.api-config{ display:flex; gap:10px; align-items:center; }
-.api-config label{ color:var(--muted); font-size:14px; }
+/* API config */
+.api-config{
+  display:flex; gap:16px; align-items:center;
+  flex-wrap:wrap;
+}
+.api-config label{
+  color:var(--muted); font-size:14px;
+}
 .api-config input{
   padding:10px 12px; border:1px solid var(--border);
   background:var(--panel); color:var(--text);
   border-radius:10px; min-width:280px; outline:none;
+  font-size:14px;
 }
 .api-config input:focus-visible{
   border-color:var(--primary);
@@ -55,15 +65,18 @@ main{
 .card{
   background:linear-gradient(180deg, var(--panel), var(--panel-2));
   border:1px solid var(--border); border-radius:14px;
-  padding:18px; box-shadow:var(--shadow);
+  padding:20px; box-shadow:var(--shadow);
 }
 
 /* ================== FORMS ================== */
-.grid-form .form-row{ display:grid; gap:6px; margin-bottom:12px; }
+.grid-form .form-row{
+  display:grid; gap:10px; margin-bottom:16px;
+}
 
 .grid-form input{
   padding:10px 12px; border:1px solid var(--border);
-  background:var(--panel); color:var(--text); border-radius:8px;
+  background:var(--panel); color:var(--text);
+  border-radius:10px; font-size:14px;
 }
 .grid-form input:focus-visible{
   border-color:var(--primary);
@@ -81,7 +94,7 @@ select{
   appearance:none; -webkit-appearance:none; -moz-appearance:none;
   background:#0f172a; color:#e5e7eb;
   border:1px solid #263246; border-radius:.6rem;
-  padding:.6rem .9rem; width:100%; line-height:1.2;
+  padding:.6rem .9rem; width:100%; line-height:1.2; font-size:14px;
 }
 select:focus{
   outline:none; border-color:#3b82f6; box-shadow:0 0 0 3px rgba(59,130,246,.25);
@@ -191,5 +204,58 @@ table.table{ width:100%; border-collapse:collapse; table-layout:auto; }
 /* Alineación en el grid del formulario */
 .grid-form .form-row > .toggle{ justify-self:start; }
 
-/* ================== FOOTER ================== */
 footer{ text-align:center; padding:16px; color:var(--muted); }
+
+/* ================== RESPONSIVE ================== */
+
+/* Pantallas pequeñas (móviles) */
+@media (max-width: 600px) {
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .api-config{
+    flex-direction:column;
+    width:100%;
+  }
+
+  main{
+    width:90vw;
+    margin:20px auto;
+  }
+
+  .card{
+    padding:16px;
+  }
+
+  .grid-form .form-row{
+    grid-template-columns:1fr;
+  }
+
+  .search-input{
+    width:100%;
+    padding:8px 12px;
+  }
+
+  table.table{
+    display:block;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .list-header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .list-tools{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .toggle{
+    width:40px;
+    height:24px;
+  }
+}
