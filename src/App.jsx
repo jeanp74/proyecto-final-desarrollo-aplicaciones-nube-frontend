@@ -1,28 +1,46 @@
 import { useAuthValidation } from './authUtils';
 
+const Header = () => (
+  <header>
+    <div className="inner u-container">
+      <h1>Portal Frontend</h1>
+      <nav aria-label="Módulos">
+        <a className="btn btn--secondary u-ring" href="#modules">Ir a módulos</a>
+      </nav>
+    </div>
+  </header>
+);
+
+function ModuleCard({ id, title, desc, href }){
+  return (
+    <article className="module-card card" aria-labelledby={`mod-${id}`} aria-describedby={`mod-desc-${id}`}>
+      <div className="meta">
+        <h3 id={`mod-${id}`}>{title}</h3>
+        <p id={`mod-desc-${id}`} className="cell-sub">{desc}</p>
+      </div>
+      <div className="actions">
+        <a className="btn btn--primary u-ring" href={href} aria-label={`Abrir ${title}`}>Abrir</a>
+      </div>
+    </article>
+  );
+}
+
 function App() {
   // Handle authentication
   useAuthValidation();
 
   const modules = [
-    { id: 'appointments', title: 'Appointments', desc: 'Gestiona y programa citas', href: '/appointments/' },
-    { id: 'doctors',      title: 'Doctors',      desc: 'Directorio y horarios de médicos', href: '/doctors/' },
-    { id: 'patients',     title: 'Patients',     desc: 'Lista y detalles de pacientes', href: '/patients/' },
-    { id: 'pharmacy',     title: 'Pharmacy',     desc: 'Gestión de medicamentos y recetas', href: '/pharmacy/' }
+    { id: 'appointments', title: 'Citas', desc: 'Gestiona y programa citas', href: '/appointments/' },
+    { id: 'doctors',      title: 'Médicos', desc: 'Directorio y horarios de médicos', href: '/doctors/' },
+    { id: 'patients',     title: 'Pacientes', desc: 'Lista y detalles de pacientes', href: '/patients/' },
+    { id: 'pharmacy',     title: 'Farmacia', desc: 'Gestión de medicamentos y recetas', href: '/pharmacy/' }
   ];
 
   return (
     <div className="container" data-theme="light">
       <a href="#main" className="skip-link">Saltar al contenido</a>
 
-      <header>
-        <div className="inner u-container">
-          <h1>Portal Frontend</h1>
-          <nav aria-label="Módulos">
-            <a className="btn btn--secondary u-ring" href="#modules">Ir a módulos</a>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main id="main" className="u-container">
         <section className="section home-hero card card--hero" aria-labelledby="bienvenida">
@@ -33,15 +51,7 @@ function App() {
         <section id="modules" className="section" aria-label="Listado de módulos">
           <div className="modules-grid">
             {modules.map(m => (
-              <article key={m.id} className="module-card card" aria-labelledby={`mod-${m.id}`} aria-describedby={`mod-desc-${m.id}`}>
-                <div>
-                  <h3 id={`mod-${m.id}`}>{m.title}</h3>
-                  <p id={`mod-desc-${m.id}`} className="cell-sub">{m.desc}</p>
-                </div>
-                <div>
-                  <a className="btn btn--primary u-ring" href={m.href} aria-label={`Abrir ${m.title}`}>Abrir</a>
-                </div>
-              </article>
+              <ModuleCard key={m.id} {...m} />
             ))}
           </div>
         </section>
