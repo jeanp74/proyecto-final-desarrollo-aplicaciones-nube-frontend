@@ -97,8 +97,10 @@ main{
 
 /* en pantallas grandes, dos columnas si hay espacio */
 @media (min-width: 1040px){
+  /* Forzar una sola columna en pantallas grandes para que el listado quede
+     debajo del formulario (Programar cita) en lugar de lado a lado. */
   main{
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr);
+    grid-template-columns: 1fr;
     align-items:flex-start;
   }
 }
