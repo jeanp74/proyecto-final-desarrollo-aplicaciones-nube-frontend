@@ -23,10 +23,12 @@ html, body, #root {
     --border: #e6eef8;
     --shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
     --radius-md: 12px;
+    --radius-sm: 8px;
     --space-1: 6px;
     --space-2: 10px;
     --space-3: 14px;
-    --radius-sm: 8px;
+    --space-4: 20px;
+    --space-5: 28px;
 }
 
 body {
@@ -42,13 +44,13 @@ body {
 .u-container {
     width: 100%;
     max-width: 1120px;
-    margin: 28px auto;
-    padding: 0 16px;
+    margin: var(--space-5) auto;
+    padding: 0 var(--space-4);
 }
 
 .layout {
     display: grid;
-    gap: var(--space-3);
+    gap: var(--space-4);
 }
 
 /* Header */
@@ -59,7 +61,7 @@ header {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: saturate(120%) blur(6px);
     border-bottom: 1px solid var(--border);
-    padding: var(--space-2) var(--space-3);
+    padding: var(--space-2) var(--space-4);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -75,19 +77,20 @@ header h1 {
 .grid-form .form-row {
     display: grid;
     gap: var(--space-2);
-    margin-bottom: 12px;
+    margin-bottom: var(--space-4);
 }
 
 .grid-form input,
 textarea,
 select {
-    padding: .6rem .8rem;
+    padding: .8rem 1rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--panel);
     color: var(--text);
     outline: none;
     transition: box-shadow .2s ease, border-color .2s ease;
+    margin-bottom: var(--space-3);
 }
 
 .grid-form input:focus-visible,
@@ -104,7 +107,7 @@ select:focus-visible {
 
 /* Button styles */
 button {
-    padding: .6rem 1rem;
+    padding: .8rem 1.2rem;
     border: 1px solid var(--primary);
     background: linear-gradient(180deg, var(--primary), var(--primary-600));
     color: white;
@@ -112,6 +115,7 @@ button {
     cursor: pointer;
     transition: transform .12s ease, box-shadow .12s ease;
     font-weight: 600;
+    margin-top: var(--space-3);
 }
 
 button:hover {
@@ -128,11 +132,13 @@ button.secondary {
     color: var(--text);
     border-color: var(--border);
     font-weight: 600;
+    margin-top: var(--space-3);
 }
 
 button.danger {
     background: linear-gradient(180deg, var(--danger), #dc2626);
     border-color: #dc2626;
+    margin-top: var(--space-3);
 }
 
 button:disabled {
@@ -156,13 +162,14 @@ button:disabled {
 }
 
 .search-input {
-    padding: .6rem .8rem;
+    padding: .8rem 1rem;
     border-radius: 999px;
     border: 1px solid var(--border);
     background: var(--panel);
     color: var(--text);
     outline: none;
     width: 200px;
+    margin-bottom: var(--space-4);
 }
 
 .search-input:focus-visible {
