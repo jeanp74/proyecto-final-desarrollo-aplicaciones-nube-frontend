@@ -194,3 +194,58 @@ footer{ text-align:center; padding:16px; color:var(--text-muted) }
   .table-wrap{ overflow-x:auto }
   .row-actions{ flex-wrap:wrap }
 }
+
+/* ================== UX POLISH & UNIQUE TOUCH ================== */
+
+/* Accent gradient and subtle vignette for cards */
+.card {
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)), radial-gradient(600px 200px at 10% 0%, rgba(6,182,212,0.02), transparent 30%);
+}
+
+/* Card header with title + meta */
+.card-header{
+  display:flex; align-items:center; gap:var(--space-3); margin-bottom:var(--space-3);
+}
+.card-header .title{ font-size:1.05rem; font-weight:800; letter-spacing:.2px }
+.card-header .subtitle{ color:var(--text-muted); font-size:.9rem }
+
+/* Avatar / Entity preview */
+.avatar{ width:44px; height:44px; border-radius:10px; overflow:hidden; flex-shrink:0; display:inline-grid; place-items:center; background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid var(--border); }
+.avatar img{ width:100%; height:100%; object-fit:cover }
+
+/* Small utility chips and badges */
+.chip{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; font-weight:600; font-size:.81rem; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.02); color:var(--text-muted) }
+.badge-soft{ padding:6px 10px; border-radius:999px; background:linear-gradient(180deg, rgba(6,182,212,0.09), rgba(6,182,212,0.04)); color:#03363b; font-weight:700 }
+
+/* Floating action for table rows on hover (desktop) */
+.table-wrap tbody tr{ position:relative }
+.row-actions{ transition: opacity var(--dur-1) var(--ease-1), transform var(--dur-1) var(--ease-1) }
+.table-wrap tbody tr:not(:hover) .row-actions{ opacity:.9 }
+
+/* Icon buttons */
+.icon-btn{ display:inline-grid; place-items:center; width:40px; height:40px; border-radius:10px; background:transparent; border:1px solid var(--border); color:var(--text); transition:background var(--dur-1) var(--ease-1), transform var(--dur-1) var(--ease-1) }
+.icon-btn:hover{ background:rgba(255,255,255,0.02); transform:translateY(-3px) }
+
+/* Table compact card mode for very small screens: each row becomes a card */
+@media (max-width:420px){
+  .table-wrap table, .table-wrap thead{ display:block }
+  .table-wrap tbody tr{ display:block; margin-bottom:10px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); padding:10px; }
+  .table-wrap tbody tr td{ display:flex; justify-content:space-between; padding:8px 10px }
+  .table-wrap tbody tr td:first-child{ font-weight:700 }
+}
+
+/* Small animated shimmer for loading placeholders */
+.shimmer{
+  position:relative; overflow:hidden; background: linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.02) 100%);
+}
+.shimmer::after{ content:""; position:absolute; inset:0; transform:translateX(-100%); background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.06) 50%, rgba(255,255,255,0) 100%); animation:shimmer 1.6s linear infinite }
+@keyframes shimmer{ to{ transform:translateX(100%) } }
+
+/* Accessibility: stronger visible focus for keyboard users */
+:where(a,button,input,select):focus-visible{ outline:none; box-shadow:0 6px 24px rgba(6,182,212,0.12); border-radius:8px }
+
+/* Utility helpers */
+.muted{ color:var(--text-muted) }
+.stack{ display:flex; gap:8px; align-items:center }
+.spaced{ margin-top:var(--space-4) }
+
