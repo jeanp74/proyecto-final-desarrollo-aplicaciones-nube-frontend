@@ -12,10 +12,10 @@ const APPT_DEFAULT =
   import.meta.env.VITE_APPOINTMENTS_API_BASE || process.env.VITE_APPOINTMENTS_API_BASE || "https://appointments-proyecto-final-desarrollo-gafjenapfvb2e6da.brazilsouth-01.azurewebsites.net/";
 
 const PATIENTS_DEFAULT =
-  import.meta.env.VITE_PATIENTS_API_BASE || process.env.VITE_PATIENTS_API_BASE;
+  import.meta.env.VITE_PATIENTS_API_BASE || process.env.VITE_PATIENTS_API_BASE || "https://patients-proyecto-final-desarrollo-dvdpe0eegng6atfy.brazilsouth-01.azurewebsites.net/";
 
 const DOCTORS_DEFAULT =
-  import.meta.env.VITE_DOCTORS_API_BASE || process.env.VITE_DOCTORS_API_BASE;
+  import.meta.env.VITE_DOCTORS_API_BASE || process.env.VITE_DOCTORS_API_BASE || "https://doctors-proyecto-final-desarrollo-xyz.brazilsouth-01.azurewebsites.net/";
 
 // ---- Utils ----
 function joinUrl(base, path) {
