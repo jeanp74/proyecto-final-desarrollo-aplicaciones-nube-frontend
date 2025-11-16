@@ -26,6 +26,7 @@ html, body, #root {
     --space-1: 6px;
     --space-2: 10px;
     --space-3: 14px;
+    --radius-sm: 8px;
 }
 
 body {
@@ -67,6 +68,7 @@ header {
 header h1 {
     font-size: 1.1rem;
     font-weight: 700;
+    color: var(--text);
 }
 
 /* Form styles */
@@ -109,6 +111,7 @@ button {
     border-radius: var(--radius-md);
     cursor: pointer;
     transition: transform .12s ease, box-shadow .12s ease;
+    font-weight: 600;
 }
 
 button:hover {
@@ -124,6 +127,7 @@ button.secondary {
     background: transparent;
     color: var(--text);
     border-color: var(--border);
+    font-weight: 600;
 }
 
 button.danger {
@@ -199,6 +203,15 @@ button:disabled {
 .row-actions {
     display: flex;
     gap: var(--space-1);
+}
+
+.row-edit-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel);
+    color: var(--text);
 }
 
 /* Modal styles for register actions */
