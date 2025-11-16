@@ -193,11 +193,11 @@ export default function App() {
     <div className="container">
       <header>
         <h1>Pacientes</h1>
-        <div className="api-config">
+        {/* <div className="api-config">
           <label htmlFor="apiBase">API Base</label>
           <input id="apiBase" value={apiBase} onChange={(e)=>setApiBaseState(e.target.value)} placeholder="/" />
           <button onClick={onSaveBase}>Guardar</button>
-        </div>
+        </div> */}
       </header>
 
       <main>
