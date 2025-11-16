@@ -310,7 +310,7 @@ export default function App() {
     <div className="container">
       <header>
         <h1>Citas</h1>
-        <div className="api-config stack">
+        {/* <div className="api-config stack">
           <div className="row">
             <label htmlFor="apiBase">API Base</label>
             <input id="apiBase" value={apiBase} onChange={(e) => setApiBaseState(e.target.value)} placeholder="/" />
@@ -326,7 +326,7 @@ export default function App() {
             <button className="secondary" onClick={doctors.load} disabled={doctors.busy}>Cargar</button>
           </div>
           <button onClick={onSaveBases}>Guardar bases</button>
-        </div>
+        </div> */}
       </header>
 
       <main>
