@@ -229,7 +229,7 @@ export default function App() {
     <div className="container">
       <header>
         <h1>Farmacia</h1>
-        <div className="api-config">
+        {/* <div className="api-config">
           <label htmlFor="apiBase">API Base</label>
           <input
             id="apiBase"
@@ -281,7 +281,7 @@ export default function App() {
           >
             Guardar bases
           </button>
-        </div>
+        </div> */}
       </header>
 
       <main>
