@@ -175,6 +175,7 @@ main {
     grid-template-columns: 140px minmax(0, 1fr);
     align-items: center;
   }
+
   .grid-form .form-row > label {
     font-size: .95rem;
     color: var(--text-muted);
@@ -436,7 +437,7 @@ tbody tr:hover {
 
 /* Small utilities */
 .muted {
-  color: var(--text-muted);
+  color: var(--muted);
 }
 
 .stack {
