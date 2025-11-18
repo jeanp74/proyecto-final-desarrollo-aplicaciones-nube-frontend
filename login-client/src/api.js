@@ -6,7 +6,8 @@ const prb = app.get("/api/config", (req, res) => {
   res.json({
     apiBase: process.env.API_BASE,
     authUrl: process.env.AUTH_URL,
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
+    gateway: process.env.VITE_GATEWAY
   });
 });
 
