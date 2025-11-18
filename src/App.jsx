@@ -1,5 +1,7 @@
 import { useAuthValidation } from './authUtils';
 
+const { logout } = useAuthValidation();
+
 const Header = () => (
   <header>
     <div className="inner u-container">
@@ -29,8 +31,6 @@ function ModuleCard({ id, title, desc, href }){
 function App() {
   // Handle authentication
   useAuthValidation();
-
-  const { logout } = useAuthValidation();
 
   const modules = [
     { id: 'appointments', title: 'Citas', desc: 'Gestiona y programa citas', href: '/appointments/' },
