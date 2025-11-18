@@ -146,7 +146,13 @@ main .section{ margin-block: var(--space-6) }
 /* Alinea la acción (botón) al fondo de la tarjeta para consistencia visual */
 .module-card{ display:flex; flex-direction:column }
 .module-card .meta{ display:block }
-.module-card .actions{ margin-top:auto; display:flex; justify-content:flex-end }
+.module-card .actions{
+  margin-top:auto;
+  display:flex;
+  justify-content:flex-end;
+  gap: var(--space-3); /* separa los botones */
+}
+
 
 /* ==========================================================================
    6) BUTTONS / LINKS
