@@ -2,7 +2,8 @@
 
 const LOGIN_KEY = "login_react_api_base";
 
-const LOGIN_DEFAULT = process.env.GATEWAY || import.meta.env.GATEWAY; // URL de tu gateway en Azure
+const LOGIN_DEFAULT = process.env.VITE_GATEWAY || import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
+console.log(process);
 console.log(process.env);
 
 
