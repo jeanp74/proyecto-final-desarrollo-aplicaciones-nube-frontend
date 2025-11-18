@@ -6,6 +6,7 @@ const Header = () => (
       <h1>Portal Frontend</h1>
       <nav aria-label="Módulos">
         <a className="btn btn--secondary u-ring" href="#modules">Ir a módulos</a>
+        <a className="btn btn--secondary u-ring" onClick={logout}>Salir</a>
       </nav>
     </div>
   </header>
