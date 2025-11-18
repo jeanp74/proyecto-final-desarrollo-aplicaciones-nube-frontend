@@ -2,7 +2,7 @@
 
 const LOGIN_KEY = "login_react_api_base";
 
-const LOGIN_DEFAULT = process.env.GATEWAY ; // URL de tu gateway en Azure
+const LOGIN_DEFAULT = process.env.GATEWAY; // URL de tu gateway en Azure
 
 function joinUrl(base, path) {
   const b = (base || "/").replace(/\/+$/, "");
