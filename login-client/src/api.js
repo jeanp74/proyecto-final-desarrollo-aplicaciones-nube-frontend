@@ -2,8 +2,18 @@
 
 const LOGIN_KEY = "login_react_api_base";
 
+const prb = app.get("/api/config", (req, res) => {
+  res.json({
+    apiBase: process.env.API_BASE,
+    authUrl: process.env.AUTH_URL,
+    environment: process.env.NODE_ENV
+  });
+});
+
+console.log(prb);
+
 const LOGIN_DEFAULT = process.env.VITE_GATEWAY || import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
-console.log(process.env);
+// console.log(process.env);
 
 
 function joinUrl(base, path) {
