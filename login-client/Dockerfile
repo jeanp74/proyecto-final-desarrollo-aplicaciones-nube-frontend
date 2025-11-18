@@ -9,9 +9,11 @@ RUN npm ci
 # Copiar el resto
 COPY . .
 
-# # Recibe la URL del backend en tiempo de build
-# ARG VITE_LOGIN_API_BASE="/"
-# RUN echo "VITE_LOGIN_API_BASE=${VITE_LOGIN_API_BASE}" > .env
+# INICIO VARIBALES DE ENTORNO
+ARG VITE_GATEWAY
+ENV VITE_GATEWAY=$VITE_GATEWAY
+# FIN VARIBALES DE ENTORNO
+
 
 # Construir
 RUN npm run build
