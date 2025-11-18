@@ -30,6 +30,8 @@ function App() {
   // Handle authentication
   useAuthValidation();
 
+  const { logout } = useAuthValidation();
+
   const modules = [
     { id: 'appointments', title: 'Citas', desc: 'Gestiona y programa citas', href: '/appointments/' },
     { id: 'doctors',      title: 'Médicos', desc: 'Directorio y horarios de médicos', href: '/doctors/' },
