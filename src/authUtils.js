@@ -44,35 +44,6 @@ function isExpired(token) {
   }
 }
 
-export async function getAllowedModules() {
-  const access = localStorage.getItem("access_token");
-  // console.log("2");
-  // console.log(access);
-  if (!access) return null;
-
-  try {
-    const resp = await fetch(`${Gateway}/api/modules`, {
-      method: "GET",
-      headers: { 
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${access}` 
-      },
-    });
-    // console.log("3");
-    // console.log(resp);
-
-    if (!resp.ok) return null;
-
-    const data = await resp.json();
-    // console.log("4");
-    // console.log(data);
-    return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
-  } catch {
-    return null;
-  }
-}
-
-
 // Hook principal
 export const useAuthValidation = () => {
   useEffect(() => {
@@ -121,6 +92,34 @@ export function redirectToLogin() {
   window.location.replace(
     "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
   );
+}
+
+export async function getAllowedModules() {
+  const access = localStorage.getItem("access_token");
+  // console.log("2");
+  // console.log(access);
+  if (!access) return null;
+
+  try {
+    const resp = await fetch(`${Gateway}/api/modules`, {
+      method: "GET",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access}` 
+      },
+    });
+    // console.log("3");
+    // console.log(resp);
+
+    if (!resp.ok) return null;
+
+    const data = await resp.json();
+    // console.log("4");
+    // console.log(data);
+    return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
+  } catch {
+    return null;
+  }
 }
 
 export const logout = () => redirectToLogin();
