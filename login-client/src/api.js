@@ -7,9 +7,9 @@ export async function loadConfig() {
   window.APP_CONFIG = await res.json();
 }
 
-loadConfig();
-
-console.log(window.APP_CONFIG);
+loadConfig().then(() => {
+  console.log("Config:", window.APP_CONFIG);
+});
 
 const LOGIN_DEFAULT = process.env.VITE_GATEWAY || import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
 // console.log(process.env);
