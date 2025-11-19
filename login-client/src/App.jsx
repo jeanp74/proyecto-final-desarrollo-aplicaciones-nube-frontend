@@ -18,6 +18,11 @@ function App() {
       const data = await loginRequest(email, password);
       console.log("Login correcto:", data);
 
+      // Guardar token y redirigir
+      // localStorage.setItem("token", data.access_token);
+      // localStorage.setItem("refresh_token", data.refresh_token);
+      // localStorage.setItem("user", JSON.stringify(data.user));
+
       // Redirigir al portal principal
       const userString = encodeURIComponent(JSON.stringify(data.user));
       window.location.href =
