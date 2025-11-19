@@ -42,8 +42,11 @@ function isExpired(token) {
 export const useAuthValidation = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    const refresh = params.get("refresh");
+    console.log(params);
+    const token = params.get("access_token");
+    const refresh = params.get("refresh_token");
+    console.log(params.get("access_token"));
+    console.log(params.get("refresh_token"));
 
     // Guardar tokens si vienen por URL
     if (token && refresh) {

@@ -19,15 +19,14 @@ function App() {
       console.log("Login correcto:", data);
 
       // Guardar token y redirigir
-      // alert(data);
-      localStorage.setItem("token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // localStorage.setItem("token", data.access_token);
+      // localStorage.setItem("refresh_token", data.refresh_token);
+      // localStorage.setItem("user", JSON.stringify(data.user));
 
       // Redirigir al portal principal
       const userString = encodeURIComponent(JSON.stringify(data.user));
       window.location.href =
-        `https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/?token=${data.access_token}&refresh_token=${data.refresh_token}`;
+        `https://front-proyecto-final-desarrollo-gabafbanbrdxc5gj.brazilsouth-01.azurewebsites.net/?access_token=${data.access_token}&refresh_token=${data.refresh_token}`;
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
       setError("Credenciales inválidas. Intente nuevamente.");
