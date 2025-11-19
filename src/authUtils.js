@@ -49,20 +49,26 @@ export const useAuthValidation = () => {
     if (token && refresh) {
       localStorage.setItem("access_token", token);
       localStorage.setItem("refresh_token", refresh);
-
+      
+      console.log(localStorage);
+      console.log("Tokens guardados");
+      
       window.history.replaceState({}, document.title, window.location.pathname);
       return;
     }
 
     // Si no hay tokens → login obligatorio
     if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
+      console.log("No hay tokens");
       return redirectToLogin();
     }
 
     // Validar expiración del token
     const accessToken = localStorage.getItem("access_token");
     if (isExpired(accessToken)) {
+      console.log("Token expirado");
       refreshToken().then(newToken => {
+        console.log("Token renovado");
         if (!newToken) redirectToLogin();
       });
     }
@@ -72,6 +78,8 @@ export const useAuthValidation = () => {
 
 export function redirectToLogin() {
   localStorage.clear();
+  console.log("Redirigiendo a login");
+  alert("Redirigiendo a login");
   window.location.replace(
     "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
   );
