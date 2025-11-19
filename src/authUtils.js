@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const Gateway = import.meta.env.VITE_GATEWAY;
-console.log("URL Gateway: ", Gateway);
+// console.log("URL Gateway: ", Gateway);
 
 // Llama al backend para renovar el token
 export async function refreshToken() {
@@ -15,11 +15,11 @@ export async function refreshToken() {
       body: JSON.stringify({ refresh_token: refresh }),
     });
 
-    console.log("Gateway: ", Gateway);
-    console.log("Refrescar token");
+    // console.log("Gateway: ", Gateway);
+    // console.log("Refrescar token");
 
     const data = await resp.json();
-    console.log(data);
+    // console.log(data);
     if (!resp.ok) return null;
 
     localStorage.setItem("access_token", data.access_token);
@@ -27,7 +27,7 @@ export async function refreshToken() {
 
     return data.access_token;
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return null;
   }
 }
@@ -46,8 +46,8 @@ function isExpired(token) {
 
 export async function getAllowedModules() {
   const access = localStorage.getItem("access_token");
-  console.log("2");
-  console.log(access);
+  // console.log("2");
+  // console.log(access);
   if (!access) return null;
 
   try {
@@ -58,14 +58,14 @@ export async function getAllowedModules() {
         "Authorization": `Bearer ${access}` 
       },
     });
-    console.log("3");
-    console.log(resp);
+    // console.log("3");
+    // console.log(resp);
 
     if (!resp.ok) return null;
 
     const data = await resp.json();
-    console.log("4");
-    console.log(data);
+    // console.log("4");
+    // console.log(data);
     return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
   } catch {
     return null;
@@ -89,7 +89,7 @@ export const useAuthValidation = () => {
       localStorage.setItem("refresh_token", refresh);
       
       // console.log(localStorage);
-      console.log("Tokens guardados");
+      // console.log("Tokens guardados");
       
       window.history.replaceState({}, document.title, window.location.pathname);
       return;
@@ -97,16 +97,16 @@ export const useAuthValidation = () => {
 
     // Si no hay tokens → login obligatorio
     if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
-      console.log("No hay tokens");
+      // console.log("No hay tokens");
       return redirectToLogin();
     }
 
     // Validar expiración del token
     const accessToken = localStorage.getItem("access_token");
     if (isExpired(accessToken)) {
-      console.log("Token expirado");
+      // console.log("Token expirado");
       refreshToken().then(newToken => {
-        console.log("Token renovado");
+        // console.log("Token renovado");
         if (!newToken) redirectToLogin();
       });
     }
@@ -115,7 +115,7 @@ export const useAuthValidation = () => {
 };
 
 export function redirectToLogin() {
-  console.log("Redirigiendo a login");
+  // console.log("Redirigiendo a login");
   alert("Redirigiendo a login");
   localStorage.clear();
   window.location.replace(
