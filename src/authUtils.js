@@ -77,9 +77,9 @@ export const useAuthValidation = () => {
 };
 
 export function redirectToLogin() {
-  localStorage.clear();
   console.log("Redirigiendo a login");
   alert("Redirigiendo a login");
+  localStorage.clear();
   window.location.replace(
     "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
   );
