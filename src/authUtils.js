@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 
-const VITE_GATEWAY = import.meta.env.VITE_GATEWAY;
 const Gateway = import.meta.env.VITE_GATEWAY;
-console.log("URL gateway: ", VITE_GATEWAY);
-console.log("URL gateway22: ", Gateway);
+console.log("URL Gateway: ", Gateway);
 
 // Llama al backend para renovar el token
 export async function refreshToken() {
@@ -11,13 +9,13 @@ export async function refreshToken() {
   if (!refresh) return null;
 
   try {
-    const resp = await fetch(`${VITE_GATEWAY}/auth/refresh`, {
+    const resp = await fetch(`${Gateway}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refresh }),
     });
 
-    console.log("URL gateway2: ", VITE_GATEWAY);
+    console.log("Gateway: ", Gateway);
     console.log("Refrescar token");
 
     const data = await resp.json();
@@ -53,7 +51,7 @@ export async function getAllowedModules() {
   if (!access) return null;
 
   try {
-    const resp = await fetch(`${VITE_GATEWAY}/api/modules`, {
+    const resp = await fetch(`${Gateway}/api/modules`, {
       method: "GET",
       headers: { 
         "Content-Type": "application/json",

@@ -4,6 +4,11 @@
 FROM node:20-alpine AS build
 WORKDIR /workspace
 
+# INICIO VARIBALES DE ENTORNO
+ARG VITE_GATEWAY
+ENV VITE_GATEWAY=$VITE_GATEWAY
+# FIN VARIBALES DE ENTORNO
+
 # ---- Portal raíz (archivos en la RAÍZ del repo) ----
 # Copiamos solo lo necesario para mejor cache
 COPY package*.json vite.config.js index.html ./portal/
