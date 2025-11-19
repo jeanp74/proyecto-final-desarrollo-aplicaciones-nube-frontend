@@ -8,6 +8,7 @@ export async function loadConfig() {
 }
 
 loadConfig().then(() => {
+  alert("init");
   console.log("Config:", window.APP_CONFIG);
 });
 
