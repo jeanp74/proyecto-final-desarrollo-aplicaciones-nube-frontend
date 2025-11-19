@@ -40,6 +40,7 @@ function isExpired(token) {
 
 export async function getAllowedModules() {
   const access = localStorage.getItem("access_token");
+  console.log("2");
   console.log(access);
   if (!access) return null;
 
@@ -51,11 +52,13 @@ export async function getAllowedModules() {
         "Authorization": `Bearer ${access}` 
       },
     });
+    console.log("3");
     console.log(resp);
 
     if (!resp.ok) return null;
 
     const data = await resp.json();
+    console.log("4");
     console.log(data);
     return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
   } catch {

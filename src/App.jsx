@@ -46,6 +46,7 @@ function App() {
     async function loadModules() {
       console.log("Cargando módulos");
       const res = await getAllowedModules();
+      console.log("1");
       console.log(res);
       if (res && res.modules) {
         setModules(res.modules);
