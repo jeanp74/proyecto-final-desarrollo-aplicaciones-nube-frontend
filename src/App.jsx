@@ -1,4 +1,4 @@
-import { useAuthValidation } from './authUtils';
+import { useAuthValidation, logout } from "./authUtils";
 
 const Header = ({ logout }) => (
   <header>
@@ -30,7 +30,7 @@ function ModuleCard({ id, title, desc, href }) {
 
 function App() {
 
-  const { logout } = useAuthValidation(); // ← AHORA SÍ ES VÁLIDO
+  useAuthValidation();
 
   const modules = [
     { id: 'appointments', title: 'Citas', desc: 'Gestiona y programa citas', href: '/appointments/' },
@@ -41,7 +41,7 @@ function App() {
 
   return (
     <div className="container" data-theme="light">
-      <Header logout={logout} /> {/* ← SE LE PASA AL HEADER */}
+      <Header logout={logout} />
 
       <main className="u-container">
         <section className="section home-hero card card--hero">
