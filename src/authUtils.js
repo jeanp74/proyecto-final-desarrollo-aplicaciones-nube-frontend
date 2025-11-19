@@ -42,19 +42,19 @@ function isExpired(token) {
 export const useAuthValidation = () => {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    console.log(params);
+    // console.log(params);
     const token = params.get("access_token");
     const refresh = params.get("refresh_token");
-    console.log(params.get("access_token"));
-    console.log(params.get("refresh_token"));
+    // console.log(params.get("access_token"));
+    // console.log(params.get("refresh_token"));
 
     // Guardar tokens si vienen por URL
     if (token && refresh) {
       localStorage.setItem("access_token", token);
       localStorage.setItem("refresh_token", refresh);
       
-      console.log(localStorage);
-      console.log("Tokens guardados");
+      // console.log(localStorage);
+      // console.log("Tokens guardados");
       
       window.history.replaceState({}, document.title, window.location.pathname);
       return;
@@ -62,16 +62,16 @@ export const useAuthValidation = () => {
 
     // Si no hay tokens → login obligatorio
     if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
-      console.log("No hay tokens");
+      // console.log("No hay tokens");
       return redirectToLogin();
     }
 
     // Validar expiración del token
     const accessToken = localStorage.getItem("access_token");
     if (isExpired(accessToken)) {
-      console.log("Token expirado");
+      // console.log("Token expirado");
       refreshToken().then(newToken => {
-        console.log("Token renovado");
+        // console.log("Token renovado");
         if (!newToken) redirectToLogin();
       });
     }
@@ -80,7 +80,7 @@ export const useAuthValidation = () => {
 };
 
 export function redirectToLogin() {
-  console.log("Redirigiendo a login");
+  // console.log("Redirigiendo a login");
   alert("Redirigiendo a login");
   localStorage.clear();
   window.location.replace(
