@@ -1,4 +1,4 @@
-import { useAuthValidation, logout } from "./authUtils";
+import { useAuthValidation, logout, getAllowedModules } from "./authUtils";
 
 const Header = ({ logout }) => (
   <header>
@@ -32,12 +32,25 @@ function App() {
 
   useAuthValidation();
 
-  const modules = [
+  const MODULE_INFO = [
     { id: 'appointments', title: 'Citas', desc: 'Gestiona y programa citas', href: '/appointments/' },
     { id: 'doctors', title: 'Médicos', desc: 'Directorio y horarios de médicos', href: '/doctors/' },
     { id: 'patients', title: 'Pacientes', desc: 'Lista de pacientes', href: '/patients/' },
     { id: 'pharmacy', title: 'Farmacia', desc: 'Gestión de medicamentos', href: '/pharmacy/' }
   ];
+
+  const [modules, setModules] = useState([]);
+
+  useEffect(() => {
+    async function loadModules() {
+      const res = await getAllowedModules();
+      if (res && res.modules) {
+        setModules(res.modules);
+      }
+    }
+    loadModules();
+  }, []);
+
 
   return (
     <div className="container" data-theme="light">
@@ -51,7 +64,10 @@ function App() {
 
         <section className="section">
           <div className="modules-grid">
-            {modules.map(m => <ModuleCard key={m.id} {...m} />)}
+            {modules.map(id => {
+              const complete = MODULE_INFO.find(m => m.id === id);
+              return <ModuleCard key={id} {...complete} />;
+            })}
           </div>
         </section>
       </main>

@@ -38,6 +38,29 @@ function isExpired(token) {
   }
 }
 
+export async function getAllowedModules() {
+  const access = localStorage.getItem("access_token");
+  if (!access) return null;
+
+  try {
+    const resp = await fetch(`${Gateway}/api/modules`, {
+      method: "GET",
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${access}` 
+      },
+    });
+
+    if (!resp.ok) return null;
+
+    const data = await resp.json();
+    return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
+  } catch {
+    return null;
+  }
+}
+
+
 // Hook principal
 export const useAuthValidation = () => {
   useEffect(() => {
