@@ -2,9 +2,7 @@
 
 const LOGIN_KEY = "login_react_api_base";
 
-const LOGIN_DEFAULT = process.env.VITE_GATEWAY || import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
-console.log(import.meta.env.VITE_GATEWAY);
-
+const LOGIN_DEFAULT = import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
 
 function joinUrl(base, path) {
   const b = (base || "/").replace(/\/+$/, "");
