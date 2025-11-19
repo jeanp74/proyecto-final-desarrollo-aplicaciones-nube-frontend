@@ -14,7 +14,10 @@ export async function refreshToken() {
       body: JSON.stringify({ refresh_token: refresh }),
     });
 
+    console.log("Refrescar token");
+
     const data = await resp.json();
+    console.log(data);
     if (!resp.ok) return null;
 
     localStorage.setItem("access_token", data.access_token);
@@ -22,6 +25,7 @@ export async function refreshToken() {
 
     return data.access_token;
   } catch (err) {
+    console.log(err);
     return null;
   }
 }
@@ -83,7 +87,7 @@ export const useAuthValidation = () => {
       localStorage.setItem("refresh_token", refresh);
       
       // console.log(localStorage);
-      // console.log("Tokens guardados");
+      console.log("Tokens guardados");
       
       window.history.replaceState({}, document.title, window.location.pathname);
       return;
@@ -91,16 +95,16 @@ export const useAuthValidation = () => {
 
     // Si no hay tokens → login obligatorio
     if (!localStorage.getItem("access_token") || !localStorage.getItem("refresh_token")) {
-      // console.log("No hay tokens");
+      console.log("No hay tokens");
       return redirectToLogin();
     }
 
     // Validar expiración del token
     const accessToken = localStorage.getItem("access_token");
     if (isExpired(accessToken)) {
-      // console.log("Token expirado");
+      console.log("Token expirado");
       refreshToken().then(newToken => {
-        // console.log("Token renovado");
+        console.log("Token renovado");
         if (!newToken) redirectToLogin();
       });
     }
@@ -109,8 +113,8 @@ export const useAuthValidation = () => {
 };
 
 export function redirectToLogin() {
-  // console.log("Redirigiendo a login");
-  // alert("Redirigiendo a login");
+  console.log("Redirigiendo a login");
+  alert("Redirigiendo a login");
   localStorage.clear();
   window.location.replace(
     "https://front-proyecto-final-desarrollo2-c5bscwbwebfafvfj.brazilsouth-01.azurewebsites.net/"
