@@ -40,6 +40,7 @@ function isExpired(token) {
 
 export async function getAllowedModules() {
   const access = localStorage.getItem("access_token");
+  console.log(access);
   if (!access) return null;
 
   try {
@@ -50,6 +51,7 @@ export async function getAllowedModules() {
         "Authorization": `Bearer ${access}` 
       },
     });
+    console.log(resp);
 
     if (!resp.ok) return null;
 
