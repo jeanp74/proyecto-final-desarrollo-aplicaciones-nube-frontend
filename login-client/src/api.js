@@ -2,10 +2,14 @@
 
 const LOGIN_KEY = "login_react_api_base";
 
-const res = await fetch("/api/config");
-const APP_CONFIG = await res.json();
+export async function loadConfig() {
+  const res = await fetch("/api/config");
+  window.APP_CONFIG = await res.json();
+}
 
-console.log(APP_CONFIG);
+loadConfig();
+
+console.log(window.APP_CONFIG);
 
 const LOGIN_DEFAULT = process.env.VITE_GATEWAY || import.meta.env.VITE_GATEWAY; // URL de tu gateway en Azure
 // console.log(process.env);
