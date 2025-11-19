@@ -54,6 +54,7 @@ export async function getAllowedModules() {
     if (!resp.ok) return null;
 
     const data = await resp.json();
+    console.log(data);
     return data; // { role: "doctor", modules: ["appointments","pharmacy"] }
   } catch {
     return null;
