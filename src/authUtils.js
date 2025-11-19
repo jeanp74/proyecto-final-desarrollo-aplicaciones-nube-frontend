@@ -14,6 +14,7 @@ export async function refreshToken() {
       body: JSON.stringify({ refresh_token: refresh }),
     });
 
+    console.log(Gateway);
     console.log("Refrescar token");
 
     const data = await resp.json();
