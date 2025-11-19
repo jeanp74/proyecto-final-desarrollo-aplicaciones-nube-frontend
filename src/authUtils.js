@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 const Gateway = import.meta.env.VITE_GATEWAY;
+console.log("URL Gateway: ", Gateway);
 
 // Llama al backend para renovar el token
 export async function refreshToken() {
@@ -14,7 +15,7 @@ export async function refreshToken() {
       body: JSON.stringify({ refresh_token: refresh }),
     });
 
-    console.log(Gateway);
+    console.log("Gateway: ", Gateway);
     console.log("Refrescar token");
 
     const data = await resp.json();
