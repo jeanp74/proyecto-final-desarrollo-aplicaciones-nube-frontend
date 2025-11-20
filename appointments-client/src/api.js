@@ -6,7 +6,7 @@ const APPOINTMENTS_PATH = "/api/appointments"; // Ruta dentro del gateway
 // ---- Fetch helpers ----
 export async function api(path, options = {}) {
   const url = `${APPOINTMENTS_API}${APPOINTMENTS_PATH}${path.startsWith("/") ? path : `/${path}`}`;
-  const token = localStorage.getItem("token"); // Obtener token de login
+  const token = localStorage.getItem("access_token"); // Obtener token de login
 
   const resp = await fetch(url, {
     headers: {
@@ -25,7 +25,7 @@ export async function api(path, options = {}) {
 
 export async function extGet(base, path) {
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
 
   const resp = await fetch(url, {
     headers: {
