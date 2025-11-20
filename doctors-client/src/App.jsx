@@ -23,7 +23,10 @@ function useDoctors() {
   const load = async () => {
     setLoading(true);
     try {
-      const data = await api("");
+      const data = await api(""); // ✅ Cambia a "" en lugar de "/doctors"
+      if (!Array.isArray(data)) {
+        throw new Error("La respuesta del servidor no es una lista de médicos");
+      }
       setItems(data);
     } catch (e) {
       alert("Error: " + e.message);
