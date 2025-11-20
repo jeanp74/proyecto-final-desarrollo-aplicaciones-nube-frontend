@@ -21,16 +21,19 @@ function useDoctors() {
   const [loading, setLoading] = useState(false);
 
   const load = async () => {
-    setLoading(true);
-    try {
-      const data = await api("/doctors");
-      setItems(data);
-    } catch (e) {
-      alert("Error: " + e.message);
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const data = await api(""); // ✅ Cambia a "" en lugar de "/doctors"
+    if (!Array.isArray(data)) {
+      throw new Error("La respuesta del servidor no es una lista de médicos");
     }
-  };
+    setItems(data);
+  } catch (e) {
+    alert("Error: " + e.message);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const create = async (payload) => {
     const d = await api("/doctors", { method: "POST", body: JSON.stringify(payload) });

@@ -1,11 +1,13 @@
 // api.js
 
 const DOCTORS_API = import.meta.env.VITE_GATEWAY; // Usamos el gateway
-const DOCTORS_PATH = "/api/doctors/doctors"; // Ruta dentro del gateway
+const DOCTORS_PATH = "/api/doctors"; // Ruta dentro del gateway
 
 // ---- Fetch helper ----
 export async function api(path, options = {}) {
-  const url = `${DOCTORS_API}${DOCTORS_PATH}${path.startsWith("/") ? path : `/${path}`}`;
+  // ✅ Ajustar para que no duplique "doctors"
+  const finalPath = path.startsWith("/doctors") ? path : `/doctors${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${DOCTORS_API}${DOCTORS_PATH}${finalPath}`;
   const token = localStorage.getItem("access_token");
 
   const resp = await fetch(url, {
