@@ -1,18 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
-import { api, getApiBase, setApiBase } from './api'
+import { api } from './api'
 
 function usePatients() {
   const [patients, setPatients] = useState([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const load = async () => {
-    setLoading(true); setError('')
+    setLoading(true)
     try {
       const data = await api('/patients')
       setPatients(data)
     } catch (e) {
-      setError(e.message)
+      alert('Error: ' + e.message)
     } finally {
       setLoading(false)
     }
@@ -33,7 +32,7 @@ function usePatients() {
     setPatients((prev) => prev.filter((x) => x.id !== id))
   }
 
-  return { patients, loading, error, load, create, update, remove }
+  return { patients, loading, load, create, update, remove }
 }
 
 function Row({ patient, patients, onUpdate, onDelete }) {
@@ -59,7 +58,6 @@ function Row({ patient, patients, onUpdate, onDelete }) {
     if (!f.apellidos) e.apellidos = 'Requerido'
     if (!f.documento) e.documento = 'Requerido'
     if (!/.+@.+\..+/.test(f.correo)) e.correo = 'Email inválido'
-    // unicidad “client-side” básica
     const dupDoc = patients.some((p) => p.id !== patient.id && (p.documento || '').toLowerCase() === f.documento.toLowerCase())
     if (!e.documento && dupDoc) e.documento = 'Documento ya registrado'
     const dupMail = patients.some((p) => p.id !== patient.id && (p.correo || '').toLowerCase() === f.correo.toLowerCase())
@@ -105,7 +103,7 @@ function Row({ patient, patients, onUpdate, onDelete }) {
 }
 
 export default function App() {
-  const { patients, loading, error, load, create, update, remove } = usePatients()
+  const { patients, loading, load, create, update, remove } = usePatients()
 
   const [form, setForm] = useState({
     nombres: '', apellidos: '', documento: '', correo: '',
@@ -129,7 +127,6 @@ export default function App() {
     )
   }, [patients, qDebounced])
 
-  const [apiBase, setApiBaseState] = useState(getApiBase())
   useEffect(() => { load() }, [])
 
   const onCreate = async (e) => {
@@ -175,29 +172,12 @@ export default function App() {
     }
   }
 
-  const onSaveBase = () => {
-    try {
-      // Permite URL absoluta o "/" para mismo origen
-      const u = new URL(apiBase, window.location.origin)
-      if (!u.protocol.startsWith('http')) throw new Error('')
-      setApiBase(apiBase)
-      alert('API Base guardada')
-    } catch {
-      alert('URL inválida')
-    }
-  }
-
   const set = (k) => (ev) => setForm((s) => ({ ...s, [k]: ev.target.value }))
 
   return (
     <div className="container">
       <header>
         <h1>Pacientes</h1>
-        {/* <div className="api-config">
-          <label htmlFor="apiBase">API Base</label>
-          <input id="apiBase" value={apiBase} onChange={(e)=>setApiBaseState(e.target.value)} placeholder="/" />
-          <button onClick={onSaveBase}>Guardar</button>
-        </div> */}
       </header>
 
       <main>
@@ -251,7 +231,6 @@ export default function App() {
           <div className="list-tools">
             <input className="search-input" placeholder="Buscar por nombre, doc, correo..." value={query} onChange={(e)=>setQuery(e.target.value)} />
           </div>
-          {error && <div className="list-status error">Error: {error}</div>}
           <table id="usersTable">
             <thead>
               <tr>

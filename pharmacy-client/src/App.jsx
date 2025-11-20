@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  api,
-  getApiBase, setApiBase,
-  getPatientsBase, setPatientsBase,
-  getDoctorsBase,  setDoctorsBase,
-  extGet
-} from "./api";
+import { api, extGet, PHARMACY_BASE, PATIENTS_BASE, DOCTORS_BASE } from "./api";
 
 /* ===== Helpers UI ===== */
 const money = (n) =>
@@ -17,11 +11,9 @@ const asInt = (v) => (isNaN(parseInt(v, 10)) ? 0 : parseInt(v, 10));
 function useMedicines() {
   const [items, setItems] = useState([]);
   const [loading, setLoad] = useState(false);
-  const [error, setError] = useState("");
 
   const load = async () => {
     setLoad(true);
-    setError("");
     try {
       const data = await api("/medicines");
       data.sort(
@@ -29,7 +21,7 @@ function useMedicines() {
       );
       setItems(data);
     } catch (e) {
-      setError(e.message);
+      alert("Error: " + e.message);
     } finally {
       setLoad(false);
     }
@@ -48,7 +40,7 @@ function useMedicines() {
     setItems((prev) => prev.filter((x) => x.id !== id));
   };
 
-  return { items, loading, error, load, create, update, remove, setItems };
+  return { items, loading, load, create, update, remove, setItems };
 }
 
 function usePrescriptions() {
@@ -59,22 +51,15 @@ function usePrescriptions() {
 
 /* ===== Catálogos externos (Pacientes / Doctores) ===== */
 function useRoster(kind /* "patients" | "doctors" */) {
-  const isPatients = kind === "patients";
-  const getBase = isPatients ? getPatientsBase : getDoctorsBase;
-  const setBaseLS = isPatients ? setPatientsBase : setDoctorsBase;
+  const base = kind === "patients" ? PATIENTS_BASE : DOCTORS_BASE;
 
-  const [base, setBase] = useState(getBase());
   const [items, setItems] = useState([]);
   const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
 
   const load = async () => {
-    if (!base) return;
     setBusy(true);
-    setErr("");
     try {
       const data = await extGet(base, `/${kind}`);
-      // normalizo para mostrar en selects
       const mapped = (data || []).map((x) => ({
         id: x.id,
         nombre:
@@ -83,22 +68,17 @@ function useRoster(kind /* "patients" | "doctors" */) {
         especialidad: x.especialidad || "",
       }));
       setItems(mapped);
-      setBaseLS(base); // persiste
     } catch (e) {
-      setErr(e.message || "Error cargando");
+      alert("Error: " + e.message);
       setItems([]);
     } finally {
       setBusy(false);
     }
   };
 
-  // === Auto-carga inicial y cuando cambia la base ===
-  useEffect(() => {
-    load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [base]);
+  useEffect(() => { load(); }, [base]);
 
-  return { base, setBase, items, busy, err, load };
+  return { items, busy, load };
 }
 
 const labelPaciente = (p) =>
@@ -108,20 +88,15 @@ const labelMedico = (d) =>
 
 /* ============================ App ============================ */
 export default function App() {
-  // Bases de APIs (header)
-  const [apiBase, setApiBaseState] = useState(getApiBase());
   const patients = useRoster("patients");
   const doctors = useRoster("doctors");
-
-  // Pharmacy data
   const meds = useMedicines();
   const rx = usePrescriptions();
 
-  // === Carga automática al abrir (igual que Citas) ===
   useEffect(() => {
     meds.load();
-    // patients.load() y doctors.load() ya se disparan en sus propios hooks
-    // gracias al useEffect([base]) dentro de useRoster.
+    patients.load();
+    doctors.load();
   }, []);
 
   /* ----- Registrar medicamento ----- */
@@ -168,7 +143,7 @@ export default function App() {
   const setR = (k) => (e) => setRForm((s) => ({ ...s, [k]: e.target.value }));
 
   const addItem = () => {
-    const oid = rForm.item_medicina_id; // usamos _id de la medicina para máxima compatibilidad
+    const oid = rForm.item_medicina_id;
     const qty = Math.max(1, Number(rForm.item_cantidad || 1));
     if (!oid) return;
     const m = meds.items.find((x) => String(x._id) === String(oid));
@@ -197,7 +172,7 @@ export default function App() {
       paciente_id: Number(rForm.paciente_id),
       medico_id: Number(rForm.medico_id),
       items: itemsReceta.map((it) => ({
-        medicina_id: it.medicina_id, // enviamos _id (string)
+        medicina_id: it.medicina_id,
         cantidad: Number(it.cantidad),
       })),
       notas: rForm.notas?.trim() || null,
@@ -208,7 +183,6 @@ export default function App() {
       setRForm({ paciente_id: "", medico_id: "", item_medicina_id: "", item_cantidad: 1, notas: "" });
       setItemsReceta([]);
       alert("Receta creada");
-      // Si tu backend descuenta stock al crear receta, puedes recargar inventario:
       meds.load();
     } catch (e) {
       alert("Error creando receta: " + e.message);
@@ -229,59 +203,6 @@ export default function App() {
     <div className="container">
       <header>
         <h1>Farmacia</h1>
-        {/* <div className="api-config">
-          <label htmlFor="apiBase">API Base</label>
-          <input
-            id="apiBase"
-            value={apiBase}
-            onChange={(e) => setApiBaseState(e.target.value)}
-            placeholder="/"
-          />
-
-          <label htmlFor="patientsBase" style={{ marginLeft: 12 }}>Pacientes API</label>
-          <input
-            id="patientsBase"
-            value={patients.base}
-            onChange={(e) => patients.setBase(e.target.value)}
-            placeholder="https://patients-..."
-            title="URL base de Pacientes (termina en /)"
-          />
-          <button className="secondary" onClick={patients.load} disabled={patients.busy}>
-            Cargar
-          </button>
-
-          <label htmlFor="doctorsBase" style={{ marginLeft: 12 }}>Doctores API</label>
-          <input
-            id="doctorsBase"
-            value={doctors.base}
-            onChange={(e) => doctors.setBase(e.target.value)}
-            placeholder="https://doctors-..."
-            title="URL base de Doctores (termina en /)"
-          />
-          <button className="secondary" onClick={doctors.load} disabled={doctors.busy}>
-            Cargar
-          </button>
-
-          <button
-            style={{ marginLeft: 12 }}
-            onClick={() => {
-              try {
-                // valida URLs y persiste
-                new URL(apiBase, window.location.origin);
-                new URL(patients.base, window.location.origin);
-                new URL(doctors.base, window.location.origin);
-                setApiBase(apiBase);
-                setPatientsBase(patients.base);
-                setDoctorsBase(doctors.base);
-                alert("Bases guardadas");
-              } catch {
-                alert("Alguna URL es inválida");
-              }
-            }}
-          >
-            Guardar bases
-          </button>
-        </div> */}
       </header>
 
       <main>
@@ -333,8 +254,6 @@ export default function App() {
               onChange={(e) => setQ(e.target.value)}
             />
           </div>
-
-          {meds.error && <div className="list-status error">Error: {meds.error}</div>}
 
           <table className="table">
             <thead>
@@ -402,7 +321,6 @@ export default function App() {
                   ))}
                 </select>
               </div>
-              {patients.err && <small className="field-error">Pacientes: {patients.err}</small>}
             </div>
 
             <div className="form-row">
@@ -415,7 +333,6 @@ export default function App() {
                   ))}
                 </select>
               </div>
-              {doctors.err && <small className="field-error">Doctores: {doctors.err}</small>}
             </div>
 
             <div className="form-row">
