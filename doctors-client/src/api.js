@@ -1,7 +1,7 @@
 // api.js
 
 const DOCTORS_API = import.meta.env.VITE_GATEWAY; // Usamos el gateway
-const DOCTORS_PATH = "/api/doctors"; // Ruta dentro del gateway
+const DOCTORS_PATH = "/api/doctors/doctors"; // Ruta dentro del gateway
 
 // ---- Fetch helper ----
 export async function api(path, options = {}) {
