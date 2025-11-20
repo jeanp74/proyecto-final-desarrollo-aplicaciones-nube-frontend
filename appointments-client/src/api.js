@@ -1,8 +1,8 @@
 // api.js
 
-const APPOINTMENTS_API = "https://appointments-proyecto-final-desarrollo-gafjenapfvb2e6da.brazilsouth-01.azurewebsites.net/";
-const PATIENTS_API = "https://patients-proyecto-final-desarrollo-dvdpe0eegng6atfy.brazilsouth-01.azurewebsites.net/";
-const DOCTORS_API = "https://doctors-proyecto-final-desarrollo-b7aqbdbpcgd0d7bq.brazilsouth-01.azurewebsites.net/";
+const APPOINTMENTS_API = import.meta.env.VITE_APPOINTMENTS_API;
+const PATIENTS_API = import.meta.env.VITE_PATIENTS_API;
+const DOCTORS_API = import.meta.env.VITE_DOCTORS_API;
 
 // ---- Fetch helpers ----
 export async function api(path, options = {}) {
