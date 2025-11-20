@@ -54,11 +54,12 @@ jobs:
           docker build ${{ matrix.context }} \
             -t $ACR/$IMG:$TAG \
             -t $ACR/$IMG:latest \
-            --build-arg VITE_PHARMACY_API='${{ secrets.VITE_PHARMACY_API }}'
-            --build-arg VITE_APPOINTMENTS_API='${{ secrets.VITE_APPOINTMENTS_API }}'
-            --build-arg VITE_PATIENTS_API='${{ secrets.VITE_PATIENTS_API }}'
-            --build-arg VITE_DOCTORS_API='${{ secrets.VITE_DOCTORS_API }}'
-            --build-arg VITE_GATEWAY='${{ secrets.VITE_GATEWAY }}'
+            --build-arg VITE_PHARMACY_API='${{ secrets.VITE_PHARMACY_API }}' \
+            --build-arg VITE_APPOINTMENTS_API='${{ secrets.VITE_APPOINTMENTS_API }}' \
+            --build-arg VITE_PATIENTS_API='${{ secrets.VITE_PATIENTS_API }}' \
+            --build-arg VITE_DOCTORS_API='${{ secrets.VITE_DOCTORS_API }}' \
+            --build-arg VITE_GATEWAY='${{ secrets.VITE_GATEWAY }}' \
+            .
 
 
           # Enviar al ACR
