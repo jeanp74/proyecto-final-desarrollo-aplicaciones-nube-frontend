@@ -1,14 +1,21 @@
 // api.js
 
-const PHARMACY_API = import.meta.env.VITE_PHARMACY_API;
-const PATIENTS_API = import.meta.env.VITE_PATIENTS_API;
-const DOCTORS_API = import.meta.env.VITE_DOCTORS_API;
+const PHARMACY_API = import.meta.env.VITE_GATEWAY; // Usamos el gateway
+const PHARMACY_PATH = "/api/pharmacy"; // Ruta dentro del gateway
+const PATIENTS_PATH = "/api/patients";
+const DOCTORS_PATH = "/api/doctors";
 
 // ---- Fetch helpers ----
 export async function api(path, options = {}) {
-  const url = `${PHARMACY_API}${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${PHARMACY_API}${PHARMACY_PATH}${path.startsWith("/") ? path : `/${path}`}`;
+  const token = localStorage.getItem("token"); // Obtener token de login
+
   const resp = await fetch(url, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers,
+    },
     ...options,
   });
   const data = resp.headers.get("content-type")?.includes("application/json")
@@ -20,8 +27,13 @@ export async function api(path, options = {}) {
 
 export async function extGet(base, path) {
   const url = `${base}${path.startsWith("/") ? path : `/${path}`}`;
+  const token = localStorage.getItem("token");
+
   const resp = await fetch(url, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
   });
   const data = resp.headers.get("content-type")?.includes("application/json")
     ? await resp.json()
@@ -31,6 +43,6 @@ export async function extGet(base, path) {
 }
 
 // URLs base exportadas
-export const PHARMACY_BASE = PHARMACY_API;
-export const PATIENTS_BASE = PATIENTS_API;
-export const DOCTORS_BASE = DOCTORS_API;
+export const PHARMACY_BASE = PHARMACY_API + PHARMACY_PATH;
+export const PATIENTS_BASE = PHARMACY_API + PATIENTS_PATH;
+export const DOCTORS_BASE = PHARMACY_API + DOCTORS_PATH;
