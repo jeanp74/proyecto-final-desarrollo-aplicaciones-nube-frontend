@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { api, getApiBase, setApiBase } from "./api";
+import { api } from "./api";
 
-/* ===== Catálogo de especialidades ===== */
+// ===== Catálogo de especialidades =====
 const ESPECIALIDADES = [
   "General",
   "Pediatría",
@@ -15,19 +15,18 @@ const ESPECIALIDADES = [
   "Psicología",
 ];
 
-/* ===== Hook de datos ===== */
+// ===== Hook de datos =====
 function useDoctors() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const load = async () => {
-    setLoading(true); setError("");
+    setLoading(true);
     try {
       const data = await api("/doctors");
       setItems(data);
     } catch (e) {
-      setError(e.message);
+      alert("Error: " + e.message);
     } finally {
       setLoading(false);
     }
@@ -48,10 +47,10 @@ function useDoctors() {
     setItems((prev) => prev.filter((x) => x.id !== id));
   };
 
-  return { items, loading, error, load, create, update, remove };
+  return { items, loading, load, create, update, remove };
 }
 
-/* ===== Fila editable ===== */
+// ===== Fila editable =====
 function Row({ item, all, onUpdate, onDelete }) {
   const [editing, setEditing] = useState(false);
   const [form, setForm] = useState(item);
@@ -169,10 +168,9 @@ function Row({ item, all, onUpdate, onDelete }) {
   );
 }
 
-/* ===== App ===== */
+// ===== App =====
 export default function App() {
-  const { items, loading, error, load, create, update, remove } = useDoctors();
-  const [apiBase, setApiBaseState] = useState(getApiBase());
+  const { items, loading, load, create, update, remove } = useDoctors();
   const [query, setQuery] = useState("");
   const [qDeb, setQDeb] = useState("");
 
@@ -197,15 +195,6 @@ export default function App() {
   const [creating, setCreating] = useState(false);
   const [errors, setErrors] = useState({});
   const set = (k) => (e) => setForm((s) => ({ ...s, [k]: k === "activo" ? e.target.checked : e.target.value }));
-
-  const onSaveBase = () => {
-    try {
-      const u = new URL(apiBase, window.location.origin);
-      if (!u.protocol.startsWith("http")) throw new Error();
-      setApiBase(apiBase);
-      alert("API Base guardada");
-    } catch { alert("URL inválida"); }
-  };
 
   const onCreate = async (e) => {
     e.preventDefault();
@@ -249,11 +238,6 @@ export default function App() {
     <div className="container">
       <header>
         <h1>Médicos</h1>
-        {/* <div className="api-config">
-          <label htmlFor="apiBase">API Base</label>
-          <input id="apiBase" value={apiBase} onChange={(e) => setApiBaseState(e.target.value)} placeholder="/" />
-          <button onClick={onSaveBase}>Guardar</button>
-        </div> */}
       </header>
 
       <main>
@@ -322,8 +306,6 @@ export default function App() {
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-
-          {error && <div className="list-status error">Error: {error}</div>}
 
           <table className="table">
             <thead>

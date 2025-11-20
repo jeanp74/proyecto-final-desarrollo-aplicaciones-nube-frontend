@@ -1,24 +1,17 @@
-const STORAGE_KEY = 'users_react_api_base';
+// api.js
 
-export function getApiBase() {
-  return localStorage.getItem(STORAGE_KEY) || import.meta.env.VITE_DOCTORS_API_BASE || process.env.VITE_DOCTORS_API_BASE || 'https://doctors-proyecto-final-desarrollo-b7aqbdbpcgd0d7bq.brazilsouth-01.azurewebsites.net/';
-}
+const DOCTORS_API = import.meta.env.VITE_DOCTORS_API;
 
-export function setApiBase(v) {
-  localStorage.setItem(STORAGE_KEY, v);
-}
-
+// ---- Fetch helper ----
 export async function api(path, options = {}) {
-  const url = `${getApiBase()}${path}`;
+  const url = `${DOCTORS_API}${path.startsWith("/") ? path : `/${path}`}`;
   const resp = await fetch(url, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { "Content-Type": "application/json" },
     ...options,
   });
-  const ct = resp.headers.get('content-type') || '';
-  const data = ct.includes('application/json') ? await resp.json() : await resp.text();
-  if (!resp.ok) {
-    const detail = typeof data === 'string' ? data : (data?.detail || data?.error || JSON.stringify(data));
-    throw new Error(`HTTP ${resp.status}: ${detail}`);
-  }
+  const data = resp.headers.get("content-type")?.includes("application/json")
+    ? await resp.json()
+    : await resp.text();
+  if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${typeof data === 'string' ? data : data?.detail || JSON.stringify(data)}`);
   return data;
 }
