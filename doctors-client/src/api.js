@@ -6,7 +6,7 @@ const DOCTORS_PATH = "/api/doctors"; // Ruta dentro del gateway
 // ---- Fetch helper ----
 export async function api(path, options = {}) {
   const url = `${DOCTORS_API}${DOCTORS_PATH}${path.startsWith("/") ? path : `/${path}`}`;
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("access_token");
 
   const resp = await fetch(url, {
     headers: {
