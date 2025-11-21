@@ -11,8 +11,6 @@ export async function api(path, options = {}) {
   const url = `${DOCTORS_API}/api/doctors${finalPath.startsWith("/") ? finalPath : `/${finalPath}`}`;
   const token = localStorage.getItem("access_token");
 
-  console.log("URL:", url);
-
   const resp = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -24,8 +22,6 @@ export async function api(path, options = {}) {
 
   const raw = await resp.text(); // Obtener como texto
 
-  console.log("Raw:", raw);
-
   let data;
   try {
     data = JSON.parse(raw);
@@ -33,12 +29,11 @@ export async function api(path, options = {}) {
     throw new Error("La respuesta no es JSON válido");
   }
 
-  console.log("Data:", data);
-
   if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${typeof data === 'string' ? data : data?.detail || JSON.stringify(data)}`);
 
-  // ✅ Validar que sea un array si esperas uno
-  if (path.includes("/doctors") || path.includes("/patients") || path.includes("/appointments") || path.includes("/medicines")) {
+  // ✅ Validar que sea un array **solo si es una operación de lectura**
+  const isReadOperation = options.method === undefined || options.method === "GET";
+  if (isReadOperation && (path.includes("/doctors") || path.includes("/patients") || path.includes("/appointments") || path.includes("/medicines"))) {
     if (!Array.isArray(data)) {
       console.error("Respuesta inesperada del servidor:", data);
       throw new Error("El servidor no devolvió una lista válida");
