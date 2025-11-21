@@ -221,6 +221,7 @@ export default function App() {
   // ===== Recetas =====
   const [rxFilters, setRxFilters] = useState({ paciente_id: "", medico_id: "" });
   const [rxFiltered, setRxFiltered] = useState([]);
+  const [selectedRx, setSelectedRx] = useState(null); // ✅ Receta seleccionada
 
   useEffect(() => {
     const filtered = rx.items.filter(rx => {
@@ -234,6 +235,23 @@ export default function App() {
   useEffect(() => {
     rx.load();
   }, []);
+
+  // ===== Detalle de receta =====
+  const openRxDetail = (rxItem) => {
+    setSelectedRx(rxItem);
+  };
+
+  const closeRxDetail = () => {
+    setSelectedRx(null);
+  };
+
+  // Calcular total de la receta
+  const calculateTotal = (items) => {
+    return items.reduce((total, item) => {
+      const med = meds.items.find(m => String(m._id) === String(item.medicina_id));
+      return total + (med?.precio || 0) * item.cantidad;
+    }, 0);
+  };
 
   return (
     <div className="container">
@@ -498,7 +516,7 @@ export default function App() {
                   const medico = doctors.items.find(d => d.id === rxItem.medico_id);
 
                   return (
-                    <tr key={rxItem.id ?? rxItem._id}>
+                    <tr key={rxItem.id ?? rxItem._id} onClick={() => openRxDetail(rxItem)} style={{ cursor: 'pointer' }}>
                       <td className="mono">{fmtId(rxItem)}</td>
                       <td>{paciente ? paciente.nombre : `#${rxItem.paciente_id}`}</td>
                       <td>{medico ? medico.nombre : `#${rxItem.medico_id}`}</td>
@@ -518,6 +536,48 @@ export default function App() {
           </table>
         </section>
       </main>
+
+      {/* ===== Detalle de receta ===== */}
+      {selectedRx && (
+        <div className="modal-overlay" onClick={closeRxDetail}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Receta #{fmtId(selectedRx)}</h3>
+              <button className="close-button" onClick={closeRxDetail}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="detail-row">
+                <strong>Paciente:</strong> {patients.items.find(p => p.id === selectedRx.paciente_id)?.nombre || `#${selectedRx.paciente_id}`}
+              </div>
+              <div className="detail-row">
+                <strong>Médico:</strong> {doctors.items.find(d => d.id === selectedRx.medico_id)?.nombre || `#${selectedRx.medico_id}`}
+              </div>
+              <div className="detail-row">
+                <strong>Items:</strong>
+                <ul>
+                  {selectedRx.items?.map((it, idx) => {
+                    const med = meds.items.find(m => String(m._id) === String(it.medicina_id));
+                    return (
+                      <li key={idx}>
+                        {med?.nombre || it.medicina_id} — {it.cantidad} × {money(med?.precio || 0)} = {money((med?.precio || 0) * it.cantidad)}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div className="detail-row">
+                <strong>Total:</strong> {money(calculateTotal(selectedRx.items || []))}
+              </div>
+              <div className="detail-row">
+                <strong>Notas:</strong> {selectedRx.notas || "—"}
+              </div>
+              <div className="detail-row">
+                <strong>Fecha:</strong> {new Date(selectedRx.fecha).toLocaleString()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer>
         <small>pharmacy-react · conectado a pharmacy-api</small>
