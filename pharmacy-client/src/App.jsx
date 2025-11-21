@@ -44,9 +44,27 @@ function useMedicines() {
 }
 
 function usePrescriptions() {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const load = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const query = new URLSearchParams(filters).toString();
+      const path = query ? `/prescriptions?${query}` : "/prescriptions";
+      const data = await api(path);
+      setItems(data);
+    } catch (e) {
+      alert("Error: " + e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const create = async (payload) =>
     api("/prescriptions", { method: "POST", body: JSON.stringify(payload) });
-  return { create };
+
+  return { items, loading, load, create };
 }
 
 /* ===== Catálogos externos (Pacientes / Doctores) ===== */
@@ -184,6 +202,7 @@ export default function App() {
       setItemsReceta([]);
       alert("Receta creada");
       meds.load();
+      rx.load(); // ✅ Recargar recetas
     } catch (e) {
       alert("Error creando receta: " + e.message);
     }
@@ -198,6 +217,23 @@ export default function App() {
       (m) => String(m.nombre).toLowerCase().includes(s) || String(m.sku).toLowerCase().includes(s)
     );
   }, [q, meds.items]);
+
+  // ===== Recetas =====
+  const [rxFilters, setRxFilters] = useState({ paciente_id: "", medico_id: "" });
+  const [rxFiltered, setRxFiltered] = useState([]);
+
+  useEffect(() => {
+    const filtered = rx.items.filter(rx => {
+      const matchPac = !rxFilters.paciente_id || rx.paciente_id === Number(rxFilters.paciente_id);
+      const matchMed = !rxFilters.medico_id || rx.medico_id === Number(rxFilters.medico_id);
+      return matchPac && matchMed;
+    });
+    setRxFiltered(filtered);
+  }, [rx.items, rxFilters]);
+
+  useEffect(() => {
+    rx.load();
+  }, []);
 
   return (
     <div className="container">
@@ -398,6 +434,88 @@ export default function App() {
               </table>
             )}
           </div>
+        </section>
+
+        {/* ===== Recetas ===== */}
+        <section className="card">
+          <div className="list-header">
+            <h2>Recetas</h2>
+            <div className="right">
+              <small>Registros: {rxFiltered.length}</small>
+              <button onClick={() => rx.load()} disabled={rx.loading}>
+                {rx.loading ? "Cargando..." : "Actualizar"}
+              </button>
+            </div>
+          </div>
+
+          <div className="list-tools">
+            <div className="pretty-select">
+              <select
+                value={rxFilters.paciente_id}
+                onChange={(e) => setRxFilters(prev => ({ ...prev, paciente_id: e.target.value }))}
+              >
+                <option value="">(Todos los pacientes)</option>
+                {patients.items.map(p => (
+                  <option key={p.id} value={p.id}>{labelPaciente(p)}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="pretty-select">
+              <select
+                value={rxFilters.medico_id}
+                onChange={(e) => setRxFilters(prev => ({ ...prev, medico_id: e.target.value }))}
+              >
+                <option value="">(Todos los médicos)</option>
+                {doctors.items.map(d => (
+                  <option key={d.id} value={d.id}>{labelMedico(d)}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <table className="table">
+            <thead>
+              <tr>
+                <th className="w-min">ID</th>
+                <th>Paciente</th>
+                <th>Médico</th>
+                <th>Items</th>
+                <th>Notas</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rxFiltered.length === 0 ? (
+                <tr>
+                  <td colSpan={6}>
+                    <div className="empty-state">Sin recetas.</div>
+                  </td>
+                </tr>
+              ) : (
+                rxFiltered.map(rxItem => {
+                  const paciente = patients.items.find(p => p.id === rxItem.paciente_id);
+                  const medico = doctors.items.find(d => d.id === rxItem.medico_id);
+
+                  return (
+                    <tr key={rxItem.id ?? rxItem._id}>
+                      <td className="mono">{fmtId(rxItem)}</td>
+                      <td>{paciente ? paciente.nombre : `#${rxItem.paciente_id}`}</td>
+                      <td>{medico ? medico.nombre : `#${rxItem.medico_id}`}</td>
+                      <td>
+                        {rxItem.items?.map(it => {
+                          const med = meds.items.find(m => String(m._id) === String(it.medicina_id));
+                          return `${med?.nombre || it.medicina_id} (${it.cantidad})`;
+                        }).join(", ") || "—"}
+                      </td>
+                      <td>{rxItem.notas || "—"}</td>
+                      <td>{new Date(rxItem.fecha).toLocaleString()}</td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
         </section>
       </main>
 
