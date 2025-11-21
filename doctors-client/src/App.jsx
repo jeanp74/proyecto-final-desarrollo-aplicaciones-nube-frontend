@@ -26,7 +26,7 @@ function useDoctors() {
       const data = await api(""); // ✅ Cambia a "" en lugar de "/doctors"
       if (!Array.isArray(data)) {
         console.error("Respuesta inesperada del servidor:", data);
-        throw new Error("La respuesta del servidor no es una lista de médicos");
+        throw new Error("La respuesta del servidor no es una lista de médicos", data);
       }
       setItems(data);
     } catch (e) {
