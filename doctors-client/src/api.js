@@ -11,6 +11,8 @@ export async function api(path, options = {}) {
   const url = `${DOCTORS_API}/api/doctors${finalPath.startsWith("/") ? finalPath : `/${finalPath}`}`;
   const token = localStorage.getItem("access_token");
 
+  console.log("URL:", url);
+
   const resp = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
@@ -22,12 +24,16 @@ export async function api(path, options = {}) {
 
   const raw = await resp.text(); // Obtener como texto
 
+  console.log("Raw:", raw);
+
   let data;
   try {
     data = JSON.parse(raw);
   } catch {
     throw new Error("La respuesta no es JSON válido");
   }
+
+  console.log("Data:", data);
 
   if (!resp.ok) throw new Error(`HTTP ${resp.status}: ${typeof data === 'string' ? data : data?.detail || JSON.stringify(data)}`);
 
