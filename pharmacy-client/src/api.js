@@ -2,13 +2,13 @@
 
 const PHARMACY_API = import.meta.env.VITE_GATEWAY; // Usamos el gateway
 const PHARMACY_PATH = "/api/pharmacy"; // Ruta dentro del gateway
-const PATIENTS_PATH = "/api/patients";
-const DOCTORS_PATH = "/api/doctors";
 
 // ---- Fetch helpers ----
 export async function api(path, options = {}) {
-  const url = `${PHARMACY_API}${PHARMACY_PATH}${path.startsWith("/") ? path : `/${path}`}`;
-  const token = localStorage.getItem("access_token"); // Obtener token de login
+  // ✅ Ajustar para que no duplique "pharmacy"
+  const finalPath = path.startsWith("/pharmacy") ? path : `/pharmacy${path.startsWith("/") ? path : `/${path}`}`;
+  const url = `${PHARMACY_API}${PHARMACY_PATH}${finalPath}`;
+  const token = localStorage.getItem("access_token");
 
   const resp = await fetch(url, {
     headers: {
@@ -44,5 +44,5 @@ export async function extGet(base, path) {
 
 // URLs base exportadas
 export const PHARMACY_BASE = PHARMACY_API + PHARMACY_PATH;
-export const PATIENTS_BASE = PHARMACY_API + PATIENTS_PATH;
-export const DOCTORS_BASE = PHARMACY_API + DOCTORS_PATH;
+export const PATIENTS_BASE = PHARMACY_API + "/api/patients";
+export const DOCTORS_BASE = PHARMACY_API + "/api/doctors";
